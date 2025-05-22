@@ -22,7 +22,7 @@ const Footer = () => {
             <p className="text-gray-400 mb-4">Your one-stop shop for all stationary and graphic design needs.</p>
             <div className="flex space-x-4">
               
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a href="https://www.instagram.com/nishantstudy" className="text-gray-400 hover:text-white transition-colors">
                 <Instagram size={20} />
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors">

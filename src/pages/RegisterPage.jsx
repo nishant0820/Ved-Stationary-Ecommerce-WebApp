@@ -14,6 +14,7 @@ const RegisterPage = () => {
   const { toast } = useToast();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +30,7 @@ const RegisterPage = () => {
     setIsLoading(true);
     setError('');
     try {
-      await register(email, password, fullName);
+      await register(email, password, fullName, phone);
       toast({ title: "Registration Successful!", description: "Please check your email to confirm your account." });
       navigate('/login'); 
     } catch (err) {
@@ -84,6 +85,20 @@ const RegisterPage = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 className="mt-1"
                 placeholder="you@example.com"
+              />
+            </div>
+            <div className="pt-4">
+              <Label htmlFor="phone">Phone No</Label>
+              <Input
+                id="phone"
+                name="phone"
+                type="phone"
+                autoComplete="phone"
+                required
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="mt-1"
+                placeholder="+91 1234567890"
               />
             </div>
             <div className="pt-4">

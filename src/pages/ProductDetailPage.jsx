@@ -130,7 +130,7 @@ const ProductDetailPage = () => {
             />
           </div>
           
-          {product.in_stock ? (
+          {product.instock ? (
             <Button 
               size="lg" 
               className="w-full md:w-auto" 

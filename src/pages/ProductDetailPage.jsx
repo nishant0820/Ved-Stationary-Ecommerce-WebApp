@@ -82,8 +82,7 @@ const ProductDetailPage = () => {
           <img 
             src={product.image}
             alt={product.name}
-            className="w-full h-auto object-cover aspect-square"
-           src="https://images.unsplash.com/photo-1632065509860-4fbcfc89ed7c" />
+            className="w-full h-auto object-cover aspect-square" />
         </motion.div>
         
         <motion.div 

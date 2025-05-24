@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -44,7 +43,7 @@ const HomePage = () => {
               transition={{ duration: 0.5 }}
             >
               <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-                Quality Stationary for <span className="text-primary">Every Need</span>
+                Quality Stationery for <span className="text-primary">Every Need</span>
               </h1>
               <p className="text-lg text-gray-600 mb-8 max-w-md">
                 Discover our premium collection of stationery and art supplies. From notebooks to professional art tools, we have everything you need.

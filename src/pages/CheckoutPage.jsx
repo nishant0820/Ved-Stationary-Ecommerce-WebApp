@@ -17,7 +17,7 @@ const CheckoutPage = () => {
   const { user } = useAuth();
   
   const [formData, setFormData] = useState({
-    name: user?.name || user?.displayName || '',
+    name: user?.user_metadata?.full_name || '',
     email: user?.email || '',
     phone: '',
     address: '',
@@ -36,6 +36,16 @@ const CheckoutPage = () => {
       navigate('/cart');
     }
   }, [cartItems, navigate, isProcessing, toast]);
+
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        name: user.user_metadata?.full_name || prev.name,
+        email: user.email || prev.email,
+      }));
+    }
+  }, [user]);
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,14 +71,14 @@ const CheckoutPage = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const processOrder = (paymentDetails = {}) => {
+  const processOrder = async (paymentDetails = {}) => {
     const subtotal = getCartTotal();
     const shipping = subtotal > 500 ? 0 : 50;
-    const tax = subtotal * 0.18; // Example 18% tax
+    const tax = subtotal * 0.18; 
     const total = subtotal + shipping + tax;
 
     const orderData = {
-      customerId: user?.id || 'guest',
+      customerId: user?.id || null, 
       customerName: formData.name,
       customerEmail: formData.email,
       customerPhone: formData.phone,
@@ -94,7 +104,7 @@ const CheckoutPage = () => {
     };
 
     try {
-      const newOrder = addOrder(orderData);
+      const newOrder = await addOrder(orderData);
       clearCart();
       toast({
         title: "Order Placed Successfully!",
@@ -106,7 +116,7 @@ const CheckoutPage = () => {
       console.error('Error saving order:', error);
       toast({
         title: "Error Saving Order",
-        description: "There was an error saving your order. Please contact support.",
+        description: error.message || "There was an error saving your order. Please contact support.",
         variant: "destructive",
       });
     } finally {
@@ -161,8 +171,7 @@ const CheckoutPage = () => {
         }
       );
     } else {
-      // Handle other payment methods or simulated payment
-      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate processing
+      await new Promise(resolve => setTimeout(resolve, 1500));
       processOrder();
     }
   };

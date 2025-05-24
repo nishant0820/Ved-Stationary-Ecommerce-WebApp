@@ -1,5 +1,6 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { Instagram, Twitter, Mail, Phone, MapPin } from 'lucide-react';
+import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -21,11 +22,13 @@ const Footer = () => {
             </div>
             <p className="text-gray-400 mb-4">Your one-stop shop for all stationary and graphic design needs.</p>
             <div className="flex space-x-4">
-              
-              <a href="https://www.instagram.com/nishantstudy" className="text-gray-400 hover:text-white transition-colors">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <Facebook size={20} />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 <Instagram size={20} />
               </a>
-              <a href="https://www.x.com/Nishant47338359" className="text-gray-400 hover:text-white transition-colors">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 <Twitter size={20} />
               </a>
             </div>
@@ -69,11 +72,11 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 mr-2 text-primary" />
-                <span className="text-gray-400">F-61/2A Street No 1, Bhajanpura, 110053</span>
+                <span className="text-gray-400">123 Stationary Street, Paper City, 12345</span>
               </li>
               <li className="flex items-center">
                 <Phone className="h-5 w-5 mr-2 text-primary" />
-                <span className="text-gray-400">+91 9899459288</span>
+                <span className="text-gray-400">+1 (555) 123-4567</span>
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 mr-2 text-primary" />

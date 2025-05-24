@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -6,6 +5,7 @@ import { ShoppingCart, Menu, X, User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/contexts/AuthContext';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,15 +33,24 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/');
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+  
+  const getUserDisplayName = () => {
+    if (!user) return '';
+    return user.user_metadata?.full_name || user.email?.split('@')[0] || 'User';
   };
 
   return (
     <header 
       className={`sticky top-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm' : 'bg-white'
+        isScrolled ? 'bg-background/90 backdrop-blur-md shadow-sm' : 'bg-background'
       }`}
     >
       <div className="container mx-auto px-4 py-4">
@@ -52,7 +61,7 @@ const Navbar = () => {
               animate={{ rotate: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-primary" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
                 <polyline points="14 2 14 8 20 8"/>
                 <line x1="16" y1="13" x2="8" y2="13"/>
@@ -63,20 +72,19 @@ const Navbar = () => {
             <span className="font-bold text-xl text-primary">Ved Stationary</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="text-gray-700 hover:text-primary transition-colors">Home</Link>
-            <Link to="/products" className="text-gray-700 hover:text-primary transition-colors">Products</Link>
+          <nav className="hidden md:flex items-center space-x-6">
+            <Link to="/" className="text-foreground/80 hover:text-primary transition-colors">Home</Link>
+            <Link to="/products" className="text-foreground/80 hover:text-primary transition-colors">Products</Link>
             {user && user.isAdmin && (
-              <Link to="/admin" className="text-gray-700 hover:text-primary transition-colors">Admin</Link>
+              <Link to="/admin" className="text-foreground/80 hover:text-primary transition-colors">Admin</Link>
             )}
           </nav>
 
-          {/* Desktop Right Side */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-3">
+            <ThemeToggle />
             {user ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-600">Hi, {user.name}</span>
+              <div className="flex items-center space-x-3">
+                <span className="text-sm text-muted-foreground">Hi, {getUserDisplayName()}</span>
                 <Button 
                   variant="ghost" 
                   size="icon"
@@ -100,7 +108,7 @@ const Navbar = () => {
                   <motion.span 
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+                    className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center"
                   >
                     {totalItems}
                   </motion.span>
@@ -109,13 +117,13 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="flex items-center space-x-4 md:hidden">
+          <div className="flex items-center space-x-2 md:hidden">
+            <ThemeToggle />
             <Link to="/cart" className="relative">
               <Button variant="ghost" size="icon">
                 <ShoppingCart className="h-5 w-5" />
                 {totalItems > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
                     {totalItems}
                   </span>
                 )}
@@ -128,33 +136,32 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isMenuOpen && (
         <motion.div 
-          className="md:hidden bg-white"
+          className="md:hidden bg-background border-t border-border"
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: 'auto', opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-            <Link to="/" className="text-gray-700 hover:text-primary transition-colors py-2" onClick={toggleMenu}>Home</Link>
-            <Link to="/products" className="text-gray-700 hover:text-primary transition-colors py-2" onClick={toggleMenu}>Products</Link>
+          <div className="container mx-auto px-4 py-4 flex flex-col space-y-3">
+            <Link to="/" className="text-foreground/80 hover:text-primary transition-colors py-2" onClick={toggleMenu}>Home</Link>
+            <Link to="/products" className="text-foreground/80 hover:text-primary transition-colors py-2" onClick={toggleMenu}>Products</Link>
             {user ? (
               <>
                 {user.isAdmin && (
-                  <Link to="/admin" className="text-gray-700 hover:text-primary transition-colors py-2" onClick={toggleMenu}>Admin</Link>
+                  <Link to="/admin" className="text-foreground/80 hover:text-primary transition-colors py-2" onClick={toggleMenu}>Admin</Link>
                 )}
-                <div className="flex items-center justify-between py-2">
-                  <span className="text-sm text-gray-600">Hi, {user.name}</span>
-                  <Button variant="ghost" size="sm" onClick={handleLogout}>
+                <div className="flex items-center justify-between py-2 border-t border-border pt-3 mt-2">
+                  <span className="text-sm text-muted-foreground">Hi, {getUserDisplayName()}</span>
+                  <Button variant="ghost" size="sm" onClick={() => { handleLogout(); toggleMenu(); }}>
                     <LogOut className="h-4 w-4 mr-2" />
                     Logout
                   </Button>
                 </div>
               </>
             ) : (
-              <Link to="/login" className="text-gray-700 hover:text-primary transition-colors py-2" onClick={toggleMenu}>Login</Link>
+              <Link to="/login" className="text-foreground/80 hover:text-primary transition-colors py-2 border-t border-border pt-3 mt-2" onClick={toggleMenu}>Login</Link>
             )}
           </div>
         </motion.div>

@@ -1,9 +1,9 @@
-
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
+import ChatbotWidget from '@/components/chatbot/ChatbotWidget.jsx';
 
 const Layout = () => {
   return (
@@ -18,6 +18,7 @@ const Layout = () => {
         <Outlet />
       </motion.main>
       <Footer />
+      <ChatbotWidget />
     </div>
   );
 };

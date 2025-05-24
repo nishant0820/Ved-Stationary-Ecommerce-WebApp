@@ -1,4 +1,3 @@
-
 // Initialize Razorpay payment
 export const initializeRazorpayPayment = (orderData, onSuccess, onError) => {
   // Check if Razorpay is loaded

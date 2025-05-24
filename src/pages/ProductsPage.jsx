@@ -7,40 +7,61 @@ import ProductGrid from '@/components/ProductGrid';
 import ProductFilters from '@/components/products/ProductFilters.jsx';
 import ProductSearchBar from '@/components/products/ProductSearchBar.jsx';
 import ActiveFiltersDisplay from '@/components/products/ActiveFiltersDisplay.jsx';
-import { products as allProducts, getProductsByCategory, searchProducts } from '@/data/products';
+import { getAllProducts, getProductsByCategory, searchProducts as searchProductsDb } from '@/data/products'; // Renamed to avoid conflict
+import { useToast } from '@/components/ui/use-toast';
 
 const ProductsPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { toast } = useToast();
   
   const queryParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
   
+  const [allProducts, setAllProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState(queryParams.get('search') || '');
   const [selectedCategory, setSelectedCategory] = useState(queryParams.get('category') || '');
-  const [priceRange, setPriceRange] = useState([0, 1000]); // Max price from products could be dynamic
+  const [priceRange, setPriceRange] = useState([0, 1000]);
   const [sortBy, setSortBy] = useState(queryParams.get('sort') || '');
   const [showFilters, setShowFilters] = useState(false);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const productsData = await getAllProducts();
+        setAllProducts(productsData || []);
+      } catch (error) {
+        toast({ title: "Error fetching products", description: error.message, variant: "destructive"});
+        setAllProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, [toast]);
+  
   useEffect(() => {
     const params = new URLSearchParams();
     if (selectedCategory) params.set('category', selectedCategory);
     if (searchQuery) params.set('search', searchQuery);
     if (sortBy) params.set('sort', sortBy);
-    // Price range could be added to URL too if desired
     navigate({ search: params.toString() }, { replace: true });
   }, [selectedCategory, searchQuery, sortBy, navigate]);
 
   const filteredProducts = useMemo(() => {
-    let result = allProducts;
+    let result = [...allProducts]; // Create a new array to avoid mutating state
 
     if (selectedCategory) {
-      result = getProductsByCategory(selectedCategory);
+      result = result.filter(product => product.category === selectedCategory);
     }
 
     if (searchQuery) {
-      const searched = searchProducts(searchQuery);
-      // If category is also selected, intersect results
-      result = selectedCategory ? result.filter(p => searched.some(sp => sp.id === p.id)) : searched;
+      const lowerQuery = searchQuery.toLowerCase();
+      result = result.filter(product => 
+        product.name.toLowerCase().includes(lowerQuery) || 
+        product.description.toLowerCase().includes(lowerQuery)
+      );
     }
     
     result = result.filter(product => {
@@ -51,23 +72,23 @@ const ProductsPage = () => {
     });
     
     if (sortBy === 'price-low') {
-      result = [...result].sort((a, b) => {
+      result.sort((a, b) => {
         const priceA = a.discount > 0 ? a.price * (1 - a.discount / 100) : a.price;
         const priceB = b.discount > 0 ? b.price * (1 - b.discount / 100) : b.price;
         return priceA - priceB;
       });
     } else if (sortBy === 'price-high') {
-      result = [...result].sort((a, b) => {
+      result.sort((a, b) => {
         const priceA = a.discount > 0 ? a.price * (1 - a.discount / 100) : a.price;
         const priceB = b.discount > 0 ? b.price * (1 - b.discount / 100) : b.price;
         return priceB - priceA;
       });
     } else if (sortBy === 'discount') {
-      result = [...result].sort((a, b) => b.discount - a.discount);
+      result.sort((a, b) => b.discount - a.discount);
     }
     
     return result;
-  }, [selectedCategory, searchQuery, priceRange, sortBy]);
+  }, [allProducts, selectedCategory, searchQuery, priceRange, sortBy]);
 
   const handleClearFilters = () => {
     setSelectedCategory('');
@@ -75,6 +96,10 @@ const ProductsPage = () => {
     setPriceRange([0, 1000]);
     setSortBy('');
   };
+
+  if (loading) {
+    return <div className="container mx-auto px-4 py-8 text-center">Loading products...</div>;
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">

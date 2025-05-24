@@ -26,6 +26,8 @@ const ProductCard = ({ product }) => {
   };
 
   return (
+
+    
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -52,17 +54,21 @@ const ProductCard = ({ product }) => {
           
           <CardContent className="flex-grow p-4">
             <div className="flex justify-between items-start mb-2">
-              <h3 className="font-semibold text-lg line-clamp-2">{product.name}</h3>
+              <h3 className="font-semibold text-lg line-clamp-2">{product.name}
+              </h3>
             </div>
             <div className="flex items-center mb-2">
               <Badge variant="secondary" className="mr-2">
                 {product.category}
               </Badge>
-              {product.inStock ? (
+              {product.instock ? (
                 <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
                   In Stock
                 </Badge>
               ) : (
+                console.log("Product object:", product),
+
+
                 <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
                   Out of Stock
                 </Badge>
@@ -90,7 +96,7 @@ const ProductCard = ({ product }) => {
               variant="default" 
               className="flex-1"
               onClick={handleAddToCart}
-              disabled={!product.inStock}
+              disabled={!product.instock}
             >
               <ShoppingCart className="h-4 w-4 mr-2" />
               Add to Cart

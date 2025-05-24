@@ -124,7 +124,7 @@ const ProductDetailPage = () => {
             <input 
               type="number" 
               min="1" 
-              value={quantity} 
+              value={quantity}
               onChange={(e) => setQuantity(parseInt(e.target.value))}
               className="w-20 p-2 border border-gray-300 rounded-md text-center"
             />

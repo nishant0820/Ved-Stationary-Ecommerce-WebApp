@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, ShoppingBag, Truck, CreditCard, Clock } from 'lucide-react';
+import { ArrowRight, ShoppingBag, Truck, CreditCard, Clock, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ProductGrid from '@/components/ProductGrid';
-import { products as allProducts, categories as allCategories } from '@/data/products';
+import { categories as allCategories, getAllProducts } from '@/data/products';
 import { useTheme } from '@/contexts/ThemeContext.jsx';
 import { cn } from '@/lib/utils';
+import { useToast } from "@/components/ui/use-toast";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -128,7 +129,33 @@ const FeaturesSection = () => {
 
 const FeaturedProductsSection = () => {
   const { theme } = useTheme();
-  const featuredProducts = allProducts.slice(0, 4);
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const fetchFeaturedProducts = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const allProducts = await getAllProducts();
+        setFeaturedProducts(allProducts.slice(0, 4));
+      } catch (err) {
+        setError(err.message || "Failed to fetch products.");
+        toast({
+          title: "Error",
+          description: "Could not load featured products. Please try again later.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchFeaturedProducts();
+  }, [toast]);
+
   return (
     <section className={cn("py-16", theme === 'dark' ? 'bg-slate-800' : 'bg-muted/50')}>
       <div className="container mx-auto px-4">
@@ -152,7 +179,20 @@ const FeaturedProductsSection = () => {
             Discover our most popular stationery items loved by students and professionals alike.
           </motion.p>
         </div>
-        <ProductGrid products={featuredProducts} />
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+          </div>
+        ) : error ? (
+          <div className="text-center text-destructive py-8">
+            <p>{error}</p>
+            <p>Please try refreshing the page.</p>
+          </div>
+        ) : featuredProducts.length > 0 ? (
+          <ProductGrid products={featuredProducts} />
+        ) : (
+          <p className="text-center text-muted-foreground py-8">No featured products available at the moment.</p>
+        )}
         <div className="text-center mt-12">
           <Button asChild variant="outline" size="lg">
             <Link to="/products">

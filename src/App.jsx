@@ -13,6 +13,7 @@ import RegisterPage from '@/pages/RegisterPage';
 import AdminDashboard from '@/pages/AdminDashboard';
 import NotFoundPage from '@/pages/NotFoundPage';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import AuthProtectedRoute from '@/components/AuthProtectedRoute';
 
 function App() {
   return (
@@ -21,10 +22,38 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="products" element={<ProductsPage />} />
-          <Route path="products/:id" element={<ProductDetailPage />} />
-          <Route path="cart" element={<CartPage />} />
-          <Route path="checkout" element={<CheckoutPage />} />
-          <Route path="order-success" element={<OrderSuccessPage />} />
+          <Route 
+            path="products/:id" 
+            element={
+              <AuthProtectedRoute>
+                <ProductDetailPage />
+              </AuthProtectedRoute>
+            } 
+          />
+          <Route 
+            path="cart" 
+            element={
+              <AuthProtectedRoute>
+                <CartPage />
+              </AuthProtectedRoute>
+            } 
+          />
+          <Route 
+            path="checkout" 
+            element={
+              <AuthProtectedRoute>
+                <CheckoutPage />
+              </AuthProtectedRoute>
+            } 
+          />
+          <Route 
+            path="order-success" 
+            element={
+              <AuthProtectedRoute>
+                <OrderSuccessPage />
+              </AuthProtectedRoute>
+            } 
+          />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route 

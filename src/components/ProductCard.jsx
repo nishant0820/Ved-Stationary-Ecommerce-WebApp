@@ -1,23 +1,36 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ShoppingCart, Eye } from 'lucide-react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
+import { useAuth } from '@/contexts/AuthContext.jsx';
 import { useToast } from '@/components/ui/use-toast';
 import { useTheme } from '@/contexts/ThemeContext.jsx';
 import { cn } from '@/lib/utils';
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
+  const { user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const { theme } = useTheme();
 
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!user) {
+      toast({
+        title: "Login Required",
+        description: "Please log in to add items to your cart.",
+        variant: "destructive",
+      });
+      navigate('/login');
+      return;
+    }
     
     addToCart(product);
     
@@ -28,6 +41,18 @@ const ProductCard = ({ product }) => {
     });
   };
 
+  const handleViewDetails = (e) => {
+    if (!user) {
+      e.preventDefault();
+      toast({
+        title: "Login Required",
+        description: "Please log in to view product details.",
+        variant: "destructive",
+      });
+      navigate('/login');
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -35,7 +60,7 @@ const ProductCard = ({ product }) => {
       transition={{ duration: 0.3 }}
       whileHover={{ y: -5 }}
     >
-      <Link to={`/products/${product.id}`}>
+      <Link to={user ? `/products/${product.id}` : '#'} onClick={handleViewDetails}>
         <Card className={cn("overflow-hidden h-full flex flex-col transition-all duration-300 hover:shadow-lg", theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-card')}>
           <div className="relative overflow-hidden pt-[56.25%]">
             <img  
@@ -60,7 +85,7 @@ const ProductCard = ({ product }) => {
               <Badge variant={theme === 'dark' ? 'secondary' : 'outline'} className={cn("mr-2", theme === 'dark' ? 'bg-slate-700 text-slate-300 border-slate-600' : '')}>
                 {product.category}
               </Badge>
-              {product.instock ? ( // Corrected from product.inStock to product.instock
+              {product.instock ? (
                 <Badge variant="outline" className={cn(theme === 'dark' ? 'bg-green-700/30 text-green-300 border-green-600/50' : 'bg-green-50 text-green-700 border-green-200')}>
                   In Stock
                 </Badge>
@@ -92,13 +117,13 @@ const ProductCard = ({ product }) => {
               variant="default" 
               className="flex-1"
               onClick={handleAddToCart}
-              disabled={!product.instock} // Corrected from product.inStock to product.instock
+              disabled={!product.instock}
             >
               <ShoppingCart className="h-4 w-4 mr-2" />
               Add to Cart
             </Button>
-            <Button variant="outline" size="icon">
-              <Eye className="h-4 w-4" />
+            <Button variant="outline" size="icon" onClick={handleViewDetails} asChild={!!user}>
+              {user ? <Link to={`/products/${product.id}`}><Eye className="h-4 w-4" /></Link> : <Eye className="h-4 w-4" />}
             </Button>
           </CardFooter>
         </Card>

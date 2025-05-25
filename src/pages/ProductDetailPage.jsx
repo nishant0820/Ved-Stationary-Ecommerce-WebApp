@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ShoppingCart, ArrowLeft, Star, ThumbsUp, Percent } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/CartContext.jsx';
+import { useAuth } from '@/contexts/AuthContext.jsx';
 import { useToast } from '@/components/ui/use-toast';
 import { getProductById } from '@/data/products';
 import { useTheme } from '@/contexts/ThemeContext.jsx';
@@ -15,6 +16,7 @@ const ProductDetailPage = () => {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const { addToCart, cartItems } = useCart();
+  const { user } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const { theme } = useTheme();
@@ -41,6 +43,15 @@ const ProductDetailPage = () => {
   }, [id, navigate, toast]);
 
   const handleAddToCart = () => {
+    if (!user) {
+      toast({
+        title: "Login Required",
+        description: "Please log in to add items to your cart.",
+        variant: "destructive",
+      });
+      navigate('/login');
+      return;
+    }
     if (product) {
       addToCart({ ...product, quantity });
       toast({
@@ -85,8 +96,7 @@ const ProductDetailPage = () => {
           <img 
             src={product.image}
             alt={product.name}
-            className="w-full h-auto object-cover aspect-square"
-           />
+            className="w-full h-auto object-cover aspect-square"/>
         </motion.div>
 
         <motion.div
@@ -134,7 +144,7 @@ const ProductDetailPage = () => {
             />
           </div>
 
-          {product.in_stock ? (
+          {product.instock ? (
             <Button
               size="lg"
               className="w-full md:w-auto"

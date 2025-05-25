@@ -27,25 +27,25 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%; /* Dark mode background - very dark blue */
-    --foreground: 210 40% 98%; /* Dark mode text - light gray/white */
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 248 90% 59%; /* Primary color - same vibrant blue/purple */
-    --primary-foreground: 210 40% 98%; /* Text on primary in dark mode - light gray/white */
-    --secondary: 217.2 32.6% 17.5%; /* Secondary background - dark gray-blue */
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%; /* Muted text - lighter gray */
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 72.2% 50.6%; /* Destructive actions - slightly adjusted red for dark */
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%; /* Border color - dark gray-blue */
-    --input: 217.2 32.6% 17.5%; /* Input background - dark gray-blue */
-    --ring: 248 90% 59%; /* Ring color - primary */
+    --background: 224 71.4% 4.1%; /* Dark mode background - very dark blue */
+    --foreground: 210 20% 98%; /* Dark mode text - light gray/white */
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 250 89.8% 60.2%; /* Primary color - same vibrant blue/purple */
+    --primary-foreground: 210 20% 98%; /* Text on primary in dark mode - light gray/white */
+    --secondary: 215 27.9% 16.9%; /* Secondary background - dark gray-blue */
+    --secondary-foreground: 210 20% 98%;
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%; /* Muted text - lighter gray */
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 62.8% 30.6%; /* Destructive actions - slightly adjusted red for dark */
+    --destructive-foreground: 210 20% 98%;
+    --border: 215 27.9% 16.9%; /* Border color - dark gray-blue */
+    --input: 215 27.9% 16.9%; /* Input background - dark gray-blue */
+    --ring: 250 89.8% 60.2%; /* Ring color - primary */
   }
 }
 
@@ -66,7 +66,8 @@
   background-color: hsl(var(--background));
   background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234f46e5' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
-.dark .hero-pattern {
+.hero-pattern-dark {
+    background-color: hsl(var(--background));
     background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23A78BFA' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
@@ -102,27 +103,15 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-muted/50;
+  @apply bg-muted/50 dark:bg-slate-800;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-foreground/20;
+  @apply bg-foreground/20 dark:bg-slate-600;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-foreground/30;
-}
-
-.dark ::-webkit-scrollbar-track {
-  @apply bg-muted/20;
-}
-
-.dark ::-webkit-scrollbar-thumb {
-  @apply bg-foreground/30;
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  @apply bg-foreground/40;
+  @apply bg-foreground/30 dark:bg-slate-500;
 }

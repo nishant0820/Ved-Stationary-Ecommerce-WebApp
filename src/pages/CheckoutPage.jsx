@@ -9,13 +9,16 @@ import CheckoutForm from '@/components/checkout/CheckoutForm.jsx';
 import CheckoutSubmitButton from '@/components/checkout/CheckoutSubmitButton.jsx';
 import { addOrder } from '@/data/orders';
 import { initializeRazorpayPayment } from '@/utils/razorpay';
+import { useTheme } from '@/contexts/ThemeContext.jsx';
+import { cn } from '@/lib/utils';
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { cartItems, getCartTotal, clearCart } = useCart();
   const { user } = useAuth();
-  
+  const { theme } = useTheme();
+
   const [formData, setFormData] = useState({
     name: user?.user_metadata?.full_name || '',
     email: user?.email || '',
@@ -26,10 +29,10 @@ const CheckoutPage = () => {
     pincode: '',
     paymentMethod: 'razorpay'
   });
-  
+
   const [errors, setErrors] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
-  
+
   useEffect(() => {
     if (cartItems.length === 0 && !isProcessing) {
       toast({ title: "Your cart is empty", description: "Redirecting to cart...", variant: "destructive" });
@@ -46,7 +49,7 @@ const CheckoutPage = () => {
       }));
     }
   }, [user]);
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -54,7 +57,7 @@ const CheckoutPage = () => {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
-  
+
   const validateForm = () => {
     const newErrors = {};
     if (!formData.name.trim()) newErrors.name = 'Name is required';
@@ -74,11 +77,11 @@ const CheckoutPage = () => {
   const processOrder = async (paymentDetails = {}) => {
     const subtotal = getCartTotal();
     const shipping = subtotal > 500 ? 0 : 50;
-    const tax = subtotal * 0.18; 
+    const tax = subtotal * 0.18;
     const total = subtotal + shipping + tax;
 
     const orderData = {
-      customerId: user?.id || null, 
+      customerId: user?.id || null,
       customerName: formData.name,
       customerEmail: formData.email,
       customerPhone: formData.phone,
@@ -123,7 +126,7 @@ const CheckoutPage = () => {
       setIsProcessing(false);
     }
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) {
@@ -134,7 +137,7 @@ const CheckoutPage = () => {
       });
       return;
     }
-    
+
     setIsProcessing(true);
 
     if (formData.paymentMethod === 'razorpay') {
@@ -145,7 +148,7 @@ const CheckoutPage = () => {
 
       const razorpayOrderData = {
         total: total,
-        id: `order_temp_${Date.now()}`, 
+        id: `order_temp_${Date.now()}`,
         customerName: formData.name,
         customerEmail: formData.email,
         customerPhone: formData.phone,
@@ -179,17 +182,17 @@ const CheckoutPage = () => {
   if (cartItems.length === 0 && !isProcessing) {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
-        <h1 className="text-2xl font-semibold">Your cart is empty.</h1>
-        <p className="text-gray-600">Redirecting you to the cart page...</p>
+        <h1 className="text-2xl font-semibold text-foreground">Your cart is empty.</h1>
+        <p className="text-muted-foreground">Redirecting you to the cart page...</p>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Checkout</h1>
+    <div className={cn("container mx-auto px-4 py-8", theme === 'dark' ? 'text-slate-100' : 'text-gray-900')}>
+      <h1 className="text-3xl font-bold mb-8 text-foreground">Checkout</h1>
       <div className="flex flex-col lg:flex-row gap-8">
-        <motion.div 
+        <motion.div
           className="lg:w-2/3"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

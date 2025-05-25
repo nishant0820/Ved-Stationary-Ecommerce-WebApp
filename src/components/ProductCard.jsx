@@ -7,10 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/components/ui/use-toast';
+import { useTheme } from '@/contexts/ThemeContext.jsx';
+import { cn } from '@/lib/utils';
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
   const { toast } = useToast();
+  const { theme } = useTheme();
 
   const handleAddToCart = (e) => {
     e.preventDefault();
@@ -26,8 +29,6 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-
-    
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -35,13 +36,12 @@ const ProductCard = ({ product }) => {
       whileHover={{ y: -5 }}
     >
       <Link to={`/products/${product.id}`}>
-        <Card className="overflow-hidden h-full flex flex-col transition-all duration-300 hover:shadow-lg">
+        <Card className={cn("overflow-hidden h-full flex flex-col transition-all duration-300 hover:shadow-lg", theme === 'dark' ? 'bg-slate-800 border-slate-700' : 'bg-card')}>
           <div className="relative overflow-hidden pt-[56.25%]">
-            <img 
-              src={product.image} 
+            <img  
               alt={product.name}
               className="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-            />
+             src={product.image} />
             {product.discount > 0 && (
               <Badge 
                 variant="destructive" 
@@ -54,22 +54,18 @@ const ProductCard = ({ product }) => {
           
           <CardContent className="flex-grow p-4">
             <div className="flex justify-between items-start mb-2">
-              <h3 className="font-semibold text-lg line-clamp-2">{product.name}
-              </h3>
+              <h3 className="font-semibold text-lg line-clamp-2 text-foreground">{product.name}</h3>
             </div>
             <div className="flex items-center mb-2">
-              <Badge variant="secondary" className="mr-2">
+              <Badge variant={theme === 'dark' ? 'secondary' : 'outline'} className={cn("mr-2", theme === 'dark' ? 'bg-slate-700 text-slate-300 border-slate-600' : '')}>
                 {product.category}
               </Badge>
-              {product.instock ? (
-                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+              {product.in_stock ? ( // Corrected from product.inStock to product.in_stock
+                <Badge variant="outline" className={cn(theme === 'dark' ? 'bg-green-700/30 text-green-300 border-green-600/50' : 'bg-green-50 text-green-700 border-green-200')}>
                   In Stock
                 </Badge>
               ) : (
-                console.log("Product object:", product),
-
-
-                <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
+                <Badge variant="outline" className={cn(theme === 'dark' ? 'bg-red-700/30 text-red-300 border-red-600/50' : 'bg-red-50 text-red-700 border-red-200')}>
                   Out of Stock
                 </Badge>
               )}
@@ -96,7 +92,7 @@ const ProductCard = ({ product }) => {
               variant="default" 
               className="flex-1"
               onClick={handleAddToCart}
-              disabled={!product.instock}
+              disabled={!product.in_stock} // Corrected from product.inStock to product.in_stock
             >
               <ShoppingCart className="h-4 w-4 mr-2" />
               Add to Cart

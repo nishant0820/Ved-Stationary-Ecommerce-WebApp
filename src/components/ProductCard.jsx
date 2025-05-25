@@ -60,7 +60,7 @@ const ProductCard = ({ product }) => {
               <Badge variant={theme === 'dark' ? 'secondary' : 'outline'} className={cn("mr-2", theme === 'dark' ? 'bg-slate-700 text-slate-300 border-slate-600' : '')}>
                 {product.category}
               </Badge>
-              {product.in_stock ? ( // Corrected from product.inStock to product.in_stock
+              {product.instock ? ( // Corrected from product.inStock to product.instock
                 <Badge variant="outline" className={cn(theme === 'dark' ? 'bg-green-700/30 text-green-300 border-green-600/50' : 'bg-green-50 text-green-700 border-green-200')}>
                   In Stock
                 </Badge>
@@ -92,7 +92,7 @@ const ProductCard = ({ product }) => {
               variant="default" 
               className="flex-1"
               onClick={handleAddToCart}
-              disabled={!product.in_stock} // Corrected from product.inStock to product.in_stock
+              disabled={!product.instock} // Corrected from product.inStock to product.instock
             >
               <ShoppingCart className="h-4 w-4 mr-2" />
               Add to Cart

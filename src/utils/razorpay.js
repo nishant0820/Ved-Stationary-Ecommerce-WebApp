@@ -24,7 +24,7 @@ const createRazorpayOrder = (orderData, onSuccess, onError) => {
     const orderId = `order_${Date.now()}`;
     
     const options = {
-      key: 'rzp_test_YOUR_KEY_ID', // Replace with your actual Razorpay key
+      key: 'rzp_test_cHvM6ejaGkEjrs', // Replace with your actual Razorpay key
       amount: orderData.total * 100, // Amount in paise
       currency: 'INR',
       name: 'Ved Stationary and Graphics',

@@ -190,13 +190,10 @@ export default defineConfig({
     },
   },
   server: {
-    proxy: {
-      '/razorpay-api': {
-        target: 'https://api.razorpay.com',
-        changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path.replace(/^\/razorpay-api/, '')
-      }
-    },
+    cors: true,
+  headers: {
+   'Cross-Origin-Embedder-Policy': 'credentialless',
+   },
+   allowedHosts: true,
   },
 });

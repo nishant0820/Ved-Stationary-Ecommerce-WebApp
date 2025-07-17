@@ -29,7 +29,7 @@ const createRazorpayOrder = (orderData, onSuccess, onError) => {
       currency: 'INR',
       name: 'Ved Stationary and Graphics',
       description: `Order #${orderData.id}`,
-      order_id: orderId,
+      order_id: 'order_QtbbvAZuacg5yc',
       handler: function(response) {
         // Handle successful payment
         onSuccess({

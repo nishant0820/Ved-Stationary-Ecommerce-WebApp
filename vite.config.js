@@ -193,5 +193,6 @@ export default defineConfig({
         secure: false, // Set to true for production deployments with HTTPS certificates
         rewrite: (path) => path.replace(/^\/razorpay-api/, '') // Rewrites the URL to remove the prefix when forwarding to Razorpay
       }
- }
- });
+    },
+  },
+});

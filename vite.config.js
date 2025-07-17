@@ -182,13 +182,8 @@ logger.error = (msg, options) => {
 }
 
 export default defineConfig({
-  customLogger: logger,
-  plugins: [react(), addTransformIndexHtml],
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'), // ✅ This enables "@/App" to work
-    },
-  },
+ customLogger: logger,
+ plugins: [react(), addTransformIndexHtml],
   server: {
     cors: true,
   headers: {

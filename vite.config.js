@@ -182,19 +182,16 @@ logger.error = (msg, options) => {
 }
 
 export default defineConfig({
-	customLogger: logger,
-	plugins: [react(), addTransformIndexHtml],
-	server: {
-		cors: true,
-		headers: {
-			'Cross-Origin-Embedder-Policy': 'credentialless',
-		},
-		allowedHosts: true,
-	},
-	resolve: {
-		extensions: ['.jsx', '.js', '.tsx', '.ts', '.json', ],
-		alias: {
-			'@': path.resolve(__dirname, './src'),
-		},
-	},
-});
+ customLogger: logger,
+ plugins: [react(), addTransformIndexHtml],
+ server: {
+
+ proxy: {
+      '/razorpay-api': { // A prefix for your Razorpay API requests in the frontend
+        target: 'https://api.razorpay.com',
+        changeOrigin: true, // Crucial for CORS bypassing
+        secure: false, // Set to true for production deployments with HTTPS certificates
+        rewrite: (path) => path.replace(/^\/razorpay-api/, '') // Rewrites the URL to remove the prefix when forwarding to Razorpay
+      }
+ }
+ });

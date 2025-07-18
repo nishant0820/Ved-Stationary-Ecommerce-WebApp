@@ -1,9 +1,10 @@
+
 // Initialize Razorpay payment
 export const initializeRazorpayPayment = (orderData, onSuccess, onError) => {
   // Check if Razorpay is loaded
   if (!window.Razorpay) {
     const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js'; 
     script.async = true;
     script.onload = () => createRazorpayOrder(orderData, onSuccess, onError);
     script.onerror = () => {
@@ -16,28 +17,37 @@ export const initializeRazorpayPayment = (orderData, onSuccess, onError) => {
 };
 
 // Create Razorpay order
-const createRazorpayOrder = (orderData, onSuccess, onError) => {
+const createRazorpayOrder = async (orderData, onSuccess, onError) => {
   try {
-    // In a real implementation, you would make an API call to your backend
-    // to create a Razorpay order and get the order ID
-    // For demo purposes, we'll simulate this with a fake order ID
-    const orderId = `order_${Date.now()}`;
-    
-    const options = {
-      key: 'rzp_test_cHvM6ejaGkEjrs', // Replace with your actual Razorpay key
-      amount: orderData.total * 100, // Amount in paise
-      currency: 'INR',
-      name: 'Ved Stationary and Graphics',
-      description: `Order #${orderData.id}`,
-      order_id: 'order_QtbbvAZuacg5yc',
-      handler: function(response) {
-        // Handle successful payment
-        onSuccess({
-          razorpay_payment_id: response.razorpay_payment_id,
-          razorpay_order_id: response.razorpay_order_id,
-          razorpay_signature: response.razorpay_signature
-        });
+    // Call your backend API to create a Razorpay order
+    const response = await fetch('http://localhost:3001/create-order/api', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        amount: orderData.total,
+      
+    
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create order');
+    }
+
+    const order = await response.json();
+
+
+    const options = {
+      key: 'rzp_test_7VpdGBzTReIP2W', // Your Razorpay key
+      amount: order.amount, // Use amount from backend response
+      currency: "INR",
+      name: 'Ved Stationary and Graphics',
+      description: `Order fx`,
+      order_id: order.id, // Use the actual order ID from backend
+
+
       prefill: {
         name: orderData.customerName,
         email: orderData.customerEmail,
@@ -49,15 +59,47 @@ const createRazorpayOrder = (orderData, onSuccess, onError) => {
       theme: {
         color: '#4f46e5'
       },
+     handler: async function (response){
+
+const body = {
+  ...response,
+}
+ const validateRes = await fetch("http://localhost:3001/create-order/validate" ,{ 
+
+   method: 'POST',
+   body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      
+       
+    })
+   
+      alert("Payment is successful ! , You will be redirected after 5 seconds")
+       setTimeout(function() {
+          
+     window.location.href = "/"; // Replace with your target URL
+ }, 5000); // 9000 milliseconds = 9 seconds
+
+  },
+
+ 
       modal: {
         ondismiss: function() {
           onError(new Error('Payment cancelled by user'));
         }
       }
     };
-    
+
     const razorpayInstance = new window.Razorpay(options);
     razorpayInstance.open();
+razorpayInstance.on('payment.failed', function (response){
+   
+    alert(response.error.reason);
+   
+})
+
+
   } catch (error) {
     onError(error);
   }

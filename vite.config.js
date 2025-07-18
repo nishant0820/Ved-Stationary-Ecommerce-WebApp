@@ -1,6 +1,7 @@
 import path from 'node:path';
 import react from '@vitejs/plugin-react';
 import { createLogger, defineConfig } from 'vite';
+import fs from 'fs'; 
 
 const configHorizonsViteErrorHandler = `
 const observer = new MutationObserver((mutations) => {
@@ -185,14 +186,24 @@ export default defineConfig({
 	customLogger: logger,
 	plugins: [react(), addTransformIndexHtml],
 	server: {
-		cors: true,
-		headers: {
-			'Cross-Origin-Embedder-Policy': 'credentialless',
-		},
-		allowedHosts: true,
+		
+	 proxy: {
+      '/razorpay-api': {
+        target: 'https://api.razorpay.com',
+        changeOrigin: true, // Crucial for CORS bypassing
+        secure: false, // Set to true for production deployments with HTTPS certificates
+        rewrite: (path) => path.replace(/^\/razorpay-api/, '') // Rewrites the URL to remove the prefix when forwarding to Razorpay
+      },
+	}
+	   // Optional: Specify port
+		// cors: true,
+		// headers: {
+		// 	'Cross-Origin-Embedder-Policy': 'credentialless',
+		// },
+		// allowedHosts: true,
 	},
 	resolve: {
-		extensions: ['.jsx', '.js', '.tsx', '.ts', '.json' ],
+		extensions: ['.jsx', '.js', '.tsx', '.ts', '.json', ],
 		alias: {
 			'@': path.resolve(__dirname, './src'),
 		},

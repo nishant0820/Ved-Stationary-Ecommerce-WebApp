@@ -19,6 +19,14 @@ export const initializeRazorpayPayment = (orderData, onSuccess, onError) => {
 // Create Razorpay order
 const createRazorpayOrder = async (orderData, onSuccess, onError) => {
   try {
+    // Check if Razorpay key is available
+    const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID;
+    console.log('Razorpay Key:', razorpayKey ? 'Available' : 'Missing');
+    
+    if (!razorpayKey) {
+      throw new Error('Razorpay key is not configured. Please check environment variables.');
+    }
+
     // Call your backend API to create a Razorpay order
     const response = await fetch('http://localhost:3001/create-order/api', {
       method: 'POST',
@@ -33,14 +41,15 @@ const createRazorpayOrder = async (orderData, onSuccess, onError) => {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to create order');
+      throw new Error(`Failed to create order: ${response.status} ${response.statusText}`);
     }
 
     const order = await response.json();
+    console.log('Order created successfully:', order);
 
 
     const options = {
-      key: import.meta.env.RAZORPAY_KEY_ID, // Your Razorpay key
+      key: razorpayKey, // Your Razorpay key
       amount: order.amount, // Use amount from backend response
       currency: "INR",
       name: 'Ved Stationary and Graphics',

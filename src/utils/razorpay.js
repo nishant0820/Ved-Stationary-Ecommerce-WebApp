@@ -20,7 +20,7 @@ export const initializeRazorpayPayment = (orderData, onSuccess, onError) => {
 const createRazorpayOrder = async (orderData, onSuccess, onError) => {
   try {
     // Call your backend API to create a Razorpay order
-    const response = await fetch('http://localhost:3000/create-order/api', {
+    const response = await fetch('http://localhost:3001/create-order/api', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ const createRazorpayOrder = async (orderData, onSuccess, onError) => {
 const body = {
   ...response,
 }
- const validateRes = await fetch("http://localhost:3000/create-order/validate" ,{ 
+ const validateRes = await fetch("http://localhost:3001/create-order/validate" ,{ 
 
    method: 'POST',
    body: JSON.stringify(body),

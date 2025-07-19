@@ -63,7 +63,7 @@ res.json({
 })
 
 // Start server
-const PORT = process.env.PORT;
+const PORT = process.env.CREATE_ORDER_PORT;
 app.listen(PORT, () => {
   console.log(`Razorpay API server running on port ${PORT}`);
 });

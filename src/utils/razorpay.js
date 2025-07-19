@@ -40,7 +40,7 @@ const createRazorpayOrder = async (orderData, onSuccess, onError) => {
 
 
     const options = {
-      key: 'rzp_test_7VpdGBzTReIP2W', // Your Razorpay key
+      key: import.meta.env.RAZORPAY_KEY_ID, // Your Razorpay key
       amount: order.amount, // Use amount from backend response
       currency: "INR",
       name: 'Ved Stationary and Graphics',

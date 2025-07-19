@@ -22,11 +22,14 @@ const createRazorpayOrder = async (orderData, onSuccess, onError) => {
     // Check if Razorpay key is available
     const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID;
     console.log('Razorpay Key:', razorpayKey ? 'Available' : 'Missing');
+    console.log('Order data:', orderData);
     
     if (!razorpayKey) {
       throw new Error('Razorpay key is not configured. Please check environment variables.');
     }
 
+    console.log('Making request to server...');
+    
     // Call your backend API to create a Razorpay order
     const response = await fetch('http://localhost:3001/create-order/api', {
       method: 'POST',
@@ -34,13 +37,15 @@ const createRazorpayOrder = async (orderData, onSuccess, onError) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        amount: orderData.total,
-      
-    
+        amount: orderData.total
       })
     });
 
+    console.log('Response status:', response.status);
+
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error response:', errorText);
       throw new Error(`Failed to create order: ${response.status} ${response.statusText}`);
     }
 
@@ -69,28 +74,35 @@ const createRazorpayOrder = async (orderData, onSuccess, onError) => {
         color: '#4f46e5'
       },
      handler: async function (response){
-
-const body = {
-  ...response,
-}
- const validateRes = await fetch("http://localhost:3001/create-order/validate" ,{ 
-
-   method: 'POST',
-   body: JSON.stringify(body),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      
-       
-    })
-   
-      alert("Payment is successful ! , You will be redirected after 5 seconds")
-       setTimeout(function() {
+        try {
+          console.log('Payment successful, validating...', response);
           
-     window.location.href = "/"; // Replace with your target URL
- }, 5000); // 9000 milliseconds = 9 seconds
+          const body = {
+            ...response,
+          }
+          
+          const validateRes = await fetch("http://localhost:3001/create-order/validate", { 
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
 
-  },
+          if (validateRes.ok) {
+            const result = await validateRes.json();
+            console.log('Payment validation successful:', result);
+            onSuccess(response);
+          } else {
+            const error = await validateRes.text();
+            console.error('Payment validation failed:', error);
+            onError(new Error('Payment validation failed'));
+          }
+        } catch (error) {
+          console.error('Payment handler error:', error);
+          onError(error);
+        }
+      },
 
  
       modal: {

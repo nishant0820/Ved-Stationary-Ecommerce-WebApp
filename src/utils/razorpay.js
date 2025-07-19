@@ -81,7 +81,7 @@ const createRazorpayOrder = async (orderData, onSuccess, onError) => {
             ...response,
           }
           
-          const validateRes = await fetch("http://localhost:3001/create-order/validate", { 
+          const validateRes = await fetch("https://server-yoy0.onrender.com/", { 
             method: 'POST',
             body: JSON.stringify(body),
             headers: {

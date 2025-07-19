@@ -63,7 +63,7 @@ res.json({
 })
 
 // Start server
-const PORT = import.meta.env.PORT;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Razorpay API server running on port ${PORT}`);
 });

@@ -26,7 +26,7 @@ export const useChatbot = () => {
         console.error("Supabase function error:", error);
         throw new Error(error.message || 'Failed to get response from chatbot.');
       }
-
+      
       addMessage('bot', data.response, data.products);
 
     } catch (err) {
@@ -74,7 +74,7 @@ const ChatbotUI = () => {
     <div className="flex flex-col h-screen p-4 bg-gray-100">
       <div className="flex-1 overflow-y-auto p-4 bg-white rounded-lg shadow-lg">
         {messages.map((msg) => (
-          <div key={msg.id} className={my-2 p-3 rounded-lg ${msg.sender === 'user' ? 'bg-blue-500 text-white self-end' : 'bg-gray-300 text-black self-start'}}>
+          <div key={msg.id} className={`my-2 p-3 rounded-lg ${msg.sender === 'user' ? 'bg-blue-500 text-white self-end' : 'bg-gray-300 text-black self-start'}`}>
             {msg.text}
           </div>
         ))}
@@ -95,3 +95,5 @@ const ChatbotUI = () => {
     </div>
   );
 };
+
+export default ChatbotUI;

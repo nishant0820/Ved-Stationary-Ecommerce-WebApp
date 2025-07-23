@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Award, Users, Target, Heart, Star, Shield, Truck, Clock } from 'lucide-react';
 
@@ -40,18 +41,6 @@ const AboutPage = () => {
       description: 'Passionate about bringing quality stationery to everyone. Leading the company with vision and dedication.',
       image: '/api/placeholder/300/300'
     },
-    {
-      name: 'Vedika Sharma',
-      role: 'Head of Operations',
-      description: 'Ensuring smooth operations and customer satisfaction. Expert in supply chain management.',
-      image: '/api/placeholder/300/300'
-    },
-    {
-      name: 'Raj Patel',
-      role: 'Creative Director',
-      description: 'Bringing creativity to our product selection and marketing. Passionate about art and design.',
-      image: '/api/placeholder/300/300'
-    }
   ];
 
   return (
@@ -280,14 +269,15 @@ const AboutPage = () => {
               Let's create something amazing together!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.a
-                href="/products"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
-              >
-                Shop Now
-              </motion.a>
+              <Link to="/products">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-block"
+                >
+                  Shop Now
+                </motion.div>
+              </Link>
               <motion.a
                 href="tel:+919899459288"
                 whileHover={{ scale: 1.05 }}

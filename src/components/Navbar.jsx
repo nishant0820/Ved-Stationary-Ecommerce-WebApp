@@ -75,6 +75,7 @@ const Navbar = () => {
           <nav className="hidden md:flex items-center space-x-6">
             <Link to="/" className="text-foreground/80 hover:text-primary transition-colors">Home</Link>
             <Link to="/products" className="text-foreground/80 hover:text-primary transition-colors">Products</Link>
+            <Link to="/about" className="text-foreground/80 hover:text-primary transition-colors">About</Link>
             {user && user.isAdmin && (
               <Link to="/admin" className="text-foreground/80 hover:text-primary transition-colors">Admin</Link>
             )}
@@ -147,6 +148,7 @@ const Navbar = () => {
           <div className="container mx-auto px-4 py-4 flex flex-col space-y-3">
             <Link to="/" className="text-foreground/80 hover:text-primary transition-colors py-2" onClick={toggleMenu}>Home</Link>
             <Link to="/products" className="text-foreground/80 hover:text-primary transition-colors py-2" onClick={toggleMenu}>Products</Link>
+            <Link to="/about" className="text-foreground/80 hover:text-primary transition-colors py-2" onClick={toggleMenu}>About</Link>
             {user ? (
               <>
                 {user.isAdmin && (

@@ -11,6 +11,7 @@ import OrderSuccessPage from '@/pages/OrderSuccessPage';
 import LoginPage from '@/pages/LoginPage';
 import RegisterPage from '@/pages/RegisterPage';
 import AdminDashboard from '@/pages/AdminDashboard';
+import PrivacyPolicyPage from '@/pages/PrivacyPolicyPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AuthProtectedRoute from '@/components/AuthProtectedRoute';
@@ -56,6 +57,7 @@ function App() {
           />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
+          <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
           <Route 
             path="admin" 
             element={

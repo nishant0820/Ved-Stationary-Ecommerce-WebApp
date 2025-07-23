@@ -46,6 +46,9 @@ const Footer = () => {
               <li>
                 <Link to="/cart" className="text-gray-400 hover:text-white transition-colors">Cart</Link>
               </li>
+              <li>
+                <Link to="/privacy-policy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link>
+              </li>
             </ul>
           </div>
 
@@ -72,15 +75,15 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 mr-2 text-primary" />
-                <span className="text-gray-400">123 Stationary Street, Paper City, 12345</span>
+                <span className="text-gray-400">F-61/2A Subhash Vihar</span>
               </li>
               <li className="flex items-center">
                 <Phone className="h-5 w-5 mr-2 text-primary" />
-                <span className="text-gray-400">+1 (555) 123-4567</span>
+                <span className="text-gray-400">+91 9899459288</span>
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 mr-2 text-primary" />
-                <span className="text-gray-400">info@vedstationary.com</span>
+                <span className="text-gray-400">gupta.nishant08042004@gmail.com</span>
               </li>
             </ul>
           </div>

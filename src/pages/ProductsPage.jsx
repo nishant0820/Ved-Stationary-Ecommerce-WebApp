@@ -18,10 +18,19 @@ const ProductsPage = () => {
   const queryParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
   
   const [allProducts, setAllProducts] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(queryParams.get('search') || '');
-  const [selectedCategory, setSelectedCategory] = useState(queryParams.get('category') || '');
+  const [searchQuery, setSearchQuery] = useState(() => {
+    const search = queryParams.get('search');
+    return search ? search : '';
+  });
+  const [selectedCategory, setSelectedCategory] = useState(() => {
+    const category = queryParams.get('category');
+    return category ? category : '';
+  });
   const [priceRange, setPriceRange] = useState([0, 1000]);
-  const [sortBy, setSortBy] = useState(queryParams.get('sort') || '');
+  const [sortBy, setSortBy] = useState(() => {
+    const sort = queryParams.get('sort');
+    return sort ? sort : '';
+  });
   const [showFilters, setShowFilters] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -30,7 +39,15 @@ const ProductsPage = () => {
       setLoading(true);
       try {
         const productsData = await getAllProducts();
-        setAllProducts(productsData || []);
+        // Validate and clean the products data
+        const validProducts = (productsData || []).map(product => ({
+          ...product,
+          name: product.name || '',
+          description: product.description || '',
+          price: product.price || 0,
+          discount: product.discount || 0
+        }));
+        setAllProducts(validProducts);
       } catch (error) {
         toast({ title: "Error fetching products", description: error.message, variant: "destructive"});
         setAllProducts([]);
@@ -43,11 +60,15 @@ const ProductsPage = () => {
   
   useEffect(() => {
     const params = new URLSearchParams();
-    if (selectedCategory) params.set('category', selectedCategory);
-    if (searchQuery) params.set('search', searchQuery);
-    if (sortBy) params.set('sort', sortBy);
-    navigate({ search: params.toString() }, { replace: true });
-  }, [selectedCategory, searchQuery, sortBy, navigate]);
+    if (selectedCategory && selectedCategory.trim()) params.set('category', selectedCategory);
+    if (searchQuery && searchQuery.trim()) params.set('search', searchQuery);
+    if (sortBy && sortBy.trim()) params.set('sort', sortBy);
+    
+    const newSearch = params.toString();
+    if (newSearch !== location.search.slice(1)) {
+      navigate({ search: newSearch }, { replace: true });
+    }
+  }, [selectedCategory, searchQuery, sortBy, navigate, location.search]);
 
   const filteredProducts = useMemo(() => {
     let result = [...allProducts]; // Create a new array to avoid mutating state
@@ -56,12 +77,14 @@ const ProductsPage = () => {
       result = result.filter(product => product.category === selectedCategory);
     }
 
-    if (searchQuery) {
+    if (searchQuery && searchQuery.trim()) {
       const lowerQuery = searchQuery.toLowerCase();
-      result = result.filter(product => 
-        product.name.toLowerCase().includes(lowerQuery) || 
-        product.description.toLowerCase().includes(lowerQuery)
-      );
+      result = result.filter(product => {
+        const productName = product.name || '';
+        const productDescription = product.description || '';
+        return productName.toLowerCase().includes(lowerQuery) || 
+               productDescription.toLowerCase().includes(lowerQuery);
+      });
     }
     
     result = result.filter(product => {
@@ -95,6 +118,8 @@ const ProductsPage = () => {
     setSearchQuery('');
     setPriceRange([0, 1000]);
     setSortBy('');
+    // Also clear URL parameters
+    navigate({ search: '' }, { replace: true });
   };
 
   if (loading) {

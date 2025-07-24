@@ -8,6 +8,7 @@ import ProductFilters from '@/components/products/ProductFilters.jsx';
 import ProductSearchBar from '@/components/products/ProductSearchBar.jsx';
 import ActiveFiltersDisplay from '@/components/products/ActiveFiltersDisplay.jsx';
 import ProductRecommendations from '@/components/ProductRecommendations.jsx';
+import { PageLoader } from '@/components/ui/LoadingSpinner.jsx';
 import { getAllProducts, getProductsByCategory, searchProducts as searchProductsDb } from '@/data/products'; // Renamed to avoid conflict
 import { useToast } from '@/components/ui/use-toast';
 
@@ -124,7 +125,7 @@ const ProductsPage = () => {
   };
 
   if (loading) {
-    return <div className="container mx-auto px-4 py-8 text-center">Loading products...</div>;
+    return <PageLoader text="Loading products..." />;
   }
 
   return (

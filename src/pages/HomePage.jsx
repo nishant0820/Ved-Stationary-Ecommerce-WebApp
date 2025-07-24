@@ -5,6 +5,7 @@ import { ArrowRight, ShoppingBag, Truck, CreditCard, Clock, Loader2 } from 'luci
 import { Button } from '@/components/ui/button';
 import ProductGrid from '@/components/ProductGrid';
 import ProductRecommendations from '@/components/ProductRecommendations.jsx';
+import LoadingSpinner from '@/components/ui/LoadingSpinner.jsx';
 import { categories as allCategories, getAllProducts } from '@/data/products';
 import { useTheme } from '@/contexts/ThemeContext.jsx';
 import { cn } from '@/lib/utils';
@@ -181,9 +182,11 @@ const FeaturedProductsSection = () => {
           </motion.p>
         </div>
         {isLoading ? (
-          <div className="flex justify-center items-center h-64">
-            <Loader2 className="h-12 w-12 animate-spin text-primary" />
-          </div>
+          <LoadingSpinner 
+            size="lg" 
+            text="Loading featured products..." 
+            className="h-64"
+          />
         ) : error ? (
           <div className="text-center text-destructive py-8">
             <p>{error}</p>

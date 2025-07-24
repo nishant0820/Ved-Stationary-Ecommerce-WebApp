@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext.jsx';
 import { useToast } from '@/components/ui/use-toast';
 import { getProductById } from '@/data/products';
 import ProductRecommendations from '@/components/ProductRecommendations.jsx';
+import { PageLoader } from '@/components/ui/LoadingSpinner.jsx';
 import { useTheme } from '@/contexts/ThemeContext.jsx';
 import { cn } from '@/lib/utils';
 
@@ -63,7 +64,7 @@ const ProductDetailPage = () => {
   };
 
   if (loading) {
-    return <div className="container mx-auto px-4 py-8 text-center text-foreground">Loading product details...</div>;
+    return <PageLoader text="Loading product details..." />;
   }
 
   if (!product) {

@@ -5,6 +5,7 @@ import { Sparkles, TrendingUp, ShoppingCart, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import ProductCard from '@/components/ProductCard';
+import LoadingSpinner from '@/components/ui/LoadingSpinner.jsx';
 import { useProductRecommendations } from '@/utils/recommendations';
 import { useTheme } from '@/contexts/ThemeContext';
 import { cn } from '@/lib/utils';
@@ -81,17 +82,11 @@ const ProductRecommendations = ({
             {title}
           </h2>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {Array.from({ length: maxItems }).map((_, index) => (
-            <div 
-              key={index}
-              className={cn(
-                "animate-pulse rounded-lg h-80",
-                theme === 'dark' ? 'bg-slate-800' : 'bg-gray-200'
-              )}
-            />
-          ))}
-        </div>
+        <LoadingSpinner 
+          size="md" 
+          text="Finding perfect recommendations..."
+          showText={true}
+        />
       </div>
     );
   }

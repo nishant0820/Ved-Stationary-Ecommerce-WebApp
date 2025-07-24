@@ -13,6 +13,7 @@ import RegisterPage from '@/pages/RegisterPage';
 import AdminDashboard from '@/pages/AdminDashboard';
 import AboutPage from '@/pages/AboutPage';
 import PrivacyPolicyPage from '@/pages/PrivacyPolicyPage';
+import TermsConditionsPage from '@/pages/TermsConditionsPage';
 import NotFoundPage from '@/pages/NotFoundPage';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AuthProtectedRoute from '@/components/AuthProtectedRoute';
@@ -60,6 +61,7 @@ function App() {
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="terms-conditions" element={<TermsConditionsPage />} />
           <Route 
             path="admin" 
             element={

@@ -1,18 +1,56 @@
 
-// Initialize Razorpay payment
-export const initializeRazorpayPayment = (orderData, onSuccess, onError) => {
-  // Check if Razorpay is loaded
-  if (!window.Razorpay) {
+// Check if Razorpay script is already loaded
+const isRazorpayLoaded = () => {
+  return typeof window !== 'undefined' && window.Razorpay;
+};
+
+// Load Razorpay script with timeout and retry mechanism
+const loadRazorpayScript = () => {
+  return new Promise((resolve, reject) => {
+    if (isRazorpayLoaded()) {
+      resolve();
+      return;
+    }
+
     const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js'; 
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
     script.async = true;
-    script.onload = () => createRazorpayOrder(orderData, onSuccess, onError);
-    script.onerror = () => {
-      onError(new Error('Failed to load Razorpay SDK'));
+    
+    const timeout = setTimeout(() => {
+      reject(new Error('Razorpay script loading timeout'));
+    }, 10000); // 10 second timeout
+
+    script.onload = () => {
+      clearTimeout(timeout);
+      resolve();
     };
-    document.body.appendChild(script);
-  } else {
-    createRazorpayOrder(orderData, onSuccess, onError);
+    
+    script.onerror = () => {
+      clearTimeout(timeout);
+      reject(new Error('Failed to load Razorpay SDK'));
+    };
+    
+    document.head.appendChild(script);
+  });
+};
+
+// Initialize Razorpay payment
+export const initializeRazorpayPayment = async (orderData, onSuccess, onError) => {
+  try {
+    // Show loading indicator
+    console.log('Initializing Razorpay payment...');
+    
+    // Ensure Razorpay is loaded
+    if (!isRazorpayLoaded()) {
+      console.log('Loading Razorpay script...');
+      await loadRazorpayScript();
+    }
+    
+    // Create and process the order
+    await createRazorpayOrder(orderData, onSuccess, onError);
+  } catch (error) {
+    console.error('Razorpay initialization error:', error);
+    onError(error);
   }
 };
 

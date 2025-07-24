@@ -6,11 +6,24 @@ import crypto from 'crypto';
 import cors from 'cors';
 
 const app = express();
+
+// CORS configuration with optimized settings
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:3001', 'http://127.0.0.1:5173'],
-  credentials: true
+  origin: ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173', 'https://ved-stationary-ecommerce-web-app.vercel.app'],
+  credentials: true,
+  optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
-app.use(express.json());
+
+// Optimize JSON parsing
+app.use(express.json({ limit: '10mb' }));
+
+// Add compression for better performance
+app.use((req, res, next) => {
+  res.header('Cache-Control', 'no-cache');
+  next();
+});
 
 dotenv.config();
 
@@ -32,16 +45,29 @@ app.get('/health', (req, res) => {
 // Create order endpoint
 app.post('/create-order/api', async (req, res) => {
   try {
+    const startTime = Date.now();
     const { amount, currency = 'INR', receipt } = req.body;
 
+    // Validate input
+    if (!amount || amount <= 0) {
+      return res.status(400).json({ error: 'Invalid amount provided' });
+    }
+
     const options = {
-      // amount: amount * 100, // Convert to paise
-      amount: Math.round(amount*100), // Convert to paise
+      amount: Math.round(amount * 100), // Convert to paise
       currency,
-      receipt:`rcpt_${Date.now()}`
+      receipt: receipt || `rcpt_${Date.now()}`,
+      notes: {
+        created_at: new Date().toISOString()
+      }
     };
 
+    console.log('Creating Razorpay order with options:', options);
     const order = await razorpay.orders.create(options);
+    
+    const endTime = Date.now();
+    console.log(`Order created successfully in ${endTime - startTime}ms:`, order.id);
+    
     res.json(order);
   } catch (error) {
     console.error('Razorpay order error:', error);

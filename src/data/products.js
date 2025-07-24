@@ -6,7 +6,8 @@ export const categories = [
   { id: 'notebooks', name: 'Notebooks & Journals' },
   { id: 'pens', name: 'Pens & Pencils' },
   { id: 'art', name: 'Art Supplies' },
-  { id: 'office', name: 'Office Supplies' }
+  { id: 'office', name: 'Office Supplies' },
+  { id: 'papers', name: 'Papers' }
 ];
 
 

@@ -4,6 +4,20 @@ export const addOrder = async (orderData) => {
   const { customerName, customerEmail, customerPhone, items, shippingAddress, paymentMethod, paymentId, subtotal, shipping, tax, total, customerId } = orderData;
 
   try {
+    console.log('Saving order to Supabase:', orderData);
+
+    // First, check if an order with this payment_id already exists
+    const { data: existingOrder } = await supabase
+      .from('orders')
+      .select('id')
+      .eq('payment_id', paymentId)
+      .single();
+
+    if (existingOrder) {
+      console.log('Order with this payment ID already exists:', existingOrder.id);
+      return { ...existingOrder, items };
+    }
+
     const { data: newOrder, error: orderError } = await supabase
       .from('orders')
       .insert([
@@ -14,18 +28,24 @@ export const addOrder = async (orderData) => {
           customer_phone: customerPhone,
           shipping_address: shippingAddress, 
           payment_method: paymentMethod,
-          payment_id: paymentId,
+          payment_id: paymentId, // This will be the Razorpay payment ID
           subtotal: subtotal,
           shipping: shipping,
           tax: tax,
           total: total,
-          status: 'pending' 
+          status: 'completed', // Mark as completed since payment is successful
+          created_at: new Date().toISOString()
         }
       ])
       .select()
       .single();
 
-    if (orderError) throw orderError;
+    if (orderError) {
+      console.error('Error creating order:', orderError);
+      throw new Error(`Failed to create order: ${orderError.message}`);
+    }
+
+    console.log('Order created successfully:', newOrder);
 
     if (newOrder && items && items.length > 0) {
       const orderItemsData = items.map(item => ({
@@ -36,15 +56,20 @@ export const addOrder = async (orderData) => {
         product_name: item.name 
       }));
 
+      console.log('Inserting order items:', orderItemsData);
+
       const { error: itemsError } = await supabase
         .from('order_items')
         .insert(orderItemsData);
 
       if (itemsError) {
-        console.error('Error inserting order items, attempting to rollback order:', itemsError);
+        console.error('Error inserting order items:', itemsError);
+        // Try to rollback the order
         await supabase.from('orders').delete().eq('id', newOrder.id);
-        throw itemsError;
+        throw new Error(`Failed to save order items: ${itemsError.message}`);
       }
+
+      console.log('Order items saved successfully');
     }
     
     return { ...newOrder, items }; // Return the order with its items

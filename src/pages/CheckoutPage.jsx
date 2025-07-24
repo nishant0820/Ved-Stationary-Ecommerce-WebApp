@@ -75,6 +75,8 @@ const CheckoutPage = () => {
   };
 
   const processOrder = async (paymentDetails = {}) => {
+    console.log('Processing order with payment details:', paymentDetails);
+    
     const subtotal = getCartTotal();
     const shipping = subtotal > 500 ? 0 : 50;
     const tax = subtotal * 0.18;
@@ -99,7 +101,7 @@ const CheckoutPage = () => {
         pincode: formData.pincode
       },
       paymentMethod: formData.paymentMethod,
-      paymentId: paymentDetails.razorpay_payment_id || `sim_${Date.now()}`,
+      paymentId: paymentDetails.razorpay_payment_id || `offline_${Date.now()}`,
       subtotal,
       shipping,
       tax,
@@ -107,20 +109,36 @@ const CheckoutPage = () => {
     };
 
     try {
+      console.log('Saving order to database...');
       const newOrder = await addOrder(orderData);
+      
+      console.log('Order saved successfully:', newOrder);
+      
+      // Clear cart only after successful order creation
       clearCart();
+      
       toast({
         title: "Order Placed Successfully!",
-        description: `Your order #${newOrder.id} has been placed.`,
+        description: `Your order has been placed successfully. Payment ID: ${orderData.paymentId}`,
         duration: 5000,
       });
-      navigate('/order-success', { state: { orderId: newOrder.id } });
+      
+      // Navigate to order success page with payment details
+      navigate('/order-success', { 
+        state: { 
+          orderId: newOrder.id,
+          paymentId: orderData.paymentId,
+          orderData: newOrder 
+        } 
+      });
+      
     } catch (error) {
       console.error('Error saving order:', error);
       toast({
         title: "Error Saving Order",
-        description: error.message || "There was an error saving your order. Please contact support.",
+        description: error.message || "There was an error saving your order. Please contact support with your payment ID: " + (paymentDetails.razorpay_payment_id || 'N/A'),
         variant: "destructive",
+        duration: 10000,
       });
     } finally {
       setIsProcessing(false);

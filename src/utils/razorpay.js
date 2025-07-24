@@ -68,8 +68,15 @@ const createRazorpayOrder = async (orderData, onSuccess, onError) => {
 
     console.log('Making request to server...');
     
+    // Use local server when in development, deployed server in production
+    const apiUrl = import.meta.env.DEV 
+      ? 'http://localhost:3000/create-order/api' 
+      : 'https://server-yoy0.onrender.com/create-order/api';
+    
+    console.log('API URL:', apiUrl);
+    
     // Call your backend API to create a Razorpay order
-    const response = await fetch('https://server-yoy0.onrender.com/create-order/api', {
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -119,7 +126,12 @@ const createRazorpayOrder = async (orderData, onSuccess, onError) => {
             ...response,
           }
           
-          const validateRes = await fetch("https://server-yoy0.onrender.com/create-order/validate", { 
+          // Use local server when in development, deployed server in production
+          const validateUrl = import.meta.env.DEV 
+            ? 'http://localhost:3000/create-order/validate' 
+            : 'https://server-yoy0.onrender.com/create-order/validate';
+          
+          const validateRes = await fetch(validateUrl, { 
             method: 'POST',
             body: JSON.stringify(body),
             headers: {

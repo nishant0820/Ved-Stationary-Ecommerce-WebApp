@@ -11,12 +11,24 @@ const OrderSuccessPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const orderIdFromState = location.state?.orderId;
-  const [order, setOrder] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const paymentIdFromState = location.state?.paymentId;
+  const orderDataFromState = location.state?.orderData;
+  const [order, setOrder] = useState(orderDataFromState || null);
+  const [loading, setLoading] = useState(!orderDataFromState);
 
   useEffect(() => {
+    // If we already have order data from state, no need to fetch
+    if (orderDataFromState) {
+      setLoading(false);
+      return;
+    }
+
     if (!orderIdFromState) {
-      toast({ title: "No order ID found", description: "Redirecting to homepage.", variant: "destructive" });
+      toast({ 
+        title: "No order information found", 
+        description: "Redirecting to homepage.", 
+        variant: "destructive" 
+      });
       navigate('/');
       return;
     }
@@ -28,17 +40,26 @@ const OrderSuccessPage = () => {
         if (fetchedOrder) {
           setOrder(fetchedOrder);
         } else {
-          toast({ title: "Order not found", description: `Could not find details for order ${orderIdFromState}.`, variant: "destructive" });
+          toast({ 
+            title: "Order not found", 
+            description: `Could not find details for order ${orderIdFromState}.`, 
+            variant: "destructive" 
+          });
         }
       } catch (error) {
-        toast({ title: "Error fetching order", description: error.message, variant: "destructive" });
+        console.error('Error fetching order:', error);
+        toast({ 
+          title: "Error fetching order", 
+          description: error.message, 
+          variant: "destructive" 
+        });
       } finally {
         setLoading(false);
       }
     };
 
     fetchOrderDetails();
-  }, [orderIdFromState, navigate, toast]);
+  }, [orderIdFromState, paymentIdFromState, orderDataFromState, navigate, toast]);
 
   const containerVariants = {
     hidden: { opacity: 0, scale: 0.9 },
@@ -97,9 +118,19 @@ const OrderSuccessPage = () => {
             <p className="text-gray-700">
               <span className="font-semibold">Total Amount:</span> ₹{order.total?.toFixed(2)}
             </p>
-             <p className="text-gray-700">
-              <span className="font-semibold">Status:</span> <span className="capitalize">{order.status}</span>
+            <p className="text-gray-700">
+              <span className="font-semibold">Status:</span> <span className="capitalize text-green-600">{order.status}</span>
             </p>
+            {(order.payment_id || paymentIdFromState) && (
+              <p className="text-gray-700">
+                <span className="font-semibold">Payment ID:</span> {order.payment_id || paymentIdFromState}
+              </p>
+            )}
+            {order.payment_method && (
+              <p className="text-gray-700">
+                <span className="font-semibold">Payment Method:</span> <span className="capitalize">{order.payment_method}</span>
+              </p>
+            )}
           </motion.div>
         )}
 

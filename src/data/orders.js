@@ -18,22 +18,30 @@ export const addOrder = async (orderData) => {
       return { ...existingOrder, items };
     }
 
+    // Prepare shipping products and quantities as JSON strings or concatenated strings
+    const shippingProducts = items.map(item => item.name).join(', ');
+    const quantities = items.map(item => item.quantity).join(', ');
+    const prices = items.map(item => {
+      const price = item.discount > 0 ? item.price * (1 - item.discount / 100) : item.price;
+      return price.toFixed(2);
+    }).join(', ');
+
+    // Format shipping address as a string
+    const formattedShippingAddress = `${shippingAddress.street}, ${shippingAddress.city}, ${shippingAddress.state} - ${shippingAddress.pincode}`;
+
     const { data: newOrder, error: orderError } = await supabase
       .from('orders')
       .insert([
-        { 
-          customer_id: customerId,
+        {
+          payment_id: paymentId, // Razorpay payment ID
           customer_name: customerName,
-          customer_email: customerEmail,
-          customer_phone: customerPhone,
-          shipping_address: shippingAddress, 
+          shipping_address: formattedShippingAddress,
+          phone_no: customerPhone,
+          shipping_product: shippingProducts, // All product names as comma-separated string
+          quantity: quantities, // All quantities as comma-separated string  
+          price: total.toFixed(2), // Total price as string
+          order_success: true, // Mark as successful since payment completed
           payment_method: paymentMethod,
-          payment_id: paymentId, // This will be the Razorpay payment ID
-          subtotal: subtotal,
-          shipping: shipping,
-          tax: tax,
-          total: total,
-          status: 'completed', // Mark as completed since payment is successful
           created_at: new Date().toISOString()
         }
       ])
@@ -46,31 +54,6 @@ export const addOrder = async (orderData) => {
     }
 
     console.log('Order created successfully:', newOrder);
-
-    if (newOrder && items && items.length > 0) {
-      const orderItemsData = items.map(item => ({
-        order_id: newOrder.id,
-        product_id: item.id, 
-        quantity: item.quantity,
-        price_at_purchase: item.discount > 0 ? item.price * (1 - item.discount / 100) : item.price,
-        product_name: item.name 
-      }));
-
-      console.log('Inserting order items:', orderItemsData);
-
-      const { error: itemsError } = await supabase
-        .from('order_items')
-        .insert(orderItemsData);
-
-      if (itemsError) {
-        console.error('Error inserting order items:', itemsError);
-        // Try to rollback the order
-        await supabase.from('orders').delete().eq('id', newOrder.id);
-        throw new Error(`Failed to save order items: ${itemsError.message}`);
-      }
-
-      console.log('Order items saved successfully');
-    }
     
     return { ...newOrder, items }; // Return the order with its items
   } catch (error) {
@@ -83,40 +66,30 @@ export const addOrder = async (orderData) => {
 export const getAllOrders = async () => {
   const { data: orders, error } = await supabase
     .from('orders')
-    .select(`
-      *,
-      order_items (
-        product_id,
-        quantity,
-        price_at_purchase,
-        product_name
-      )
-    `)
+    .select('*')
     .order('created_at', { ascending: false });
 
   if (error) {
     console.error('Error fetching all orders:', error);
     throw new Error(error.message || 'Failed to fetch orders');
   }
+  
+  // Convert the order data to match the expected format
   return orders.map(order => ({
     ...order,
-    items: order.order_items 
+    total: parseFloat(order.price) || 0,
+    status: order.order_success ? 'completed' : 'pending',
+    items: order.shipping_product ? order.shipping_product.split(', ').map((product, index) => ({
+      name: product,
+      quantity: order.quantity ? parseInt(order.quantity.split(', ')[index]) || 1 : 1
+    })) : []
   }));
 };
-
 
 export const getOrderById = async (orderId) => {
   const { data: order, error } = await supabase
     .from('orders')
-    .select(`
-      *,
-      order_items (
-        product_id,
-        quantity,
-        price_at_purchase,
-        product_name
-      )
-    `)
+    .select('*')
     .eq('id', orderId)
     .single();
   
@@ -124,7 +97,21 @@ export const getOrderById = async (orderId) => {
     console.error('Error fetching order by ID:', error);
     return null; 
   }
-  return order ? { ...order, items: order.order_items } : null;
+
+  if (!order) {
+    return null;
+  }
+
+  // Convert the order data to match the expected format
+  return {
+    ...order,
+    total: parseFloat(order.price) || 0,
+    status: order.order_success ? 'completed' : 'pending',
+    items: order.shipping_product ? order.shipping_product.split(', ').map((product, index) => ({
+      name: product,
+      quantity: order.quantity ? parseInt(order.quantity.split(', ')[index]) || 1 : 1
+    })) : []
+  };
 };
 
 export const getOrdersByCustomerId = async (customerId) => {

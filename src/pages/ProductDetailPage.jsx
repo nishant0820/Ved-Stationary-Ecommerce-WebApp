@@ -7,6 +7,7 @@ import { useCart } from '@/contexts/CartContext.jsx';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import { useToast } from '@/components/ui/use-toast';
 import { getProductById } from '@/data/products';
+import ProductRecommendations from '@/components/ProductRecommendations.jsx';
 import { useTheme } from '@/contexts/ThemeContext.jsx';
 import { cn } from '@/lib/utils';
 
@@ -177,6 +178,16 @@ const ProductDetailPage = () => {
           </div>
         </motion.div>
       </div>
+
+      {/* AI-Powered Product Recommendations */}
+      <ProductRecommendations 
+        currentProduct={product}
+        category={product?.category}
+        title="Customers Also Viewed"
+        maxItems={4}
+        showReasonBadges={true}
+        className="mt-12 border-t pt-8"
+      />
     </div>
   );
 };

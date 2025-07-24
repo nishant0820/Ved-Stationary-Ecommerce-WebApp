@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, ShoppingBag, Truck, CreditCard, Clock, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ProductGrid from '@/components/ProductGrid';
+import ProductRecommendations from '@/components/ProductRecommendations.jsx';
 import { categories as allCategories, getAllProducts } from '@/data/products';
 import { useTheme } from '@/contexts/ThemeContext.jsx';
 import { cn } from '@/lib/utils';
@@ -384,6 +385,19 @@ const HomePage = () => {
       <HeroSection />
       <FeaturesSection />
       <FeaturedProductsSection />
+      
+      {/* AI-Powered Recommendations Section */}
+      <section className="py-16 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <ProductRecommendations 
+            title="Personalized for You"
+            maxItems={4}
+            showReasonBadges={true}
+            className="py-0"
+          />
+        </div>
+      </section>
+      
       <CategoriesSection />
       <TestimonialSection />
       <NewsletterSection />

@@ -7,6 +7,7 @@ import ProductGrid from '@/components/ProductGrid';
 import ProductFilters from '@/components/products/ProductFilters.jsx';
 import ProductSearchBar from '@/components/products/ProductSearchBar.jsx';
 import ActiveFiltersDisplay from '@/components/products/ActiveFiltersDisplay.jsx';
+import ProductRecommendations from '@/components/ProductRecommendations.jsx';
 import { getAllProducts, getProductsByCategory, searchProducts as searchProductsDb } from '@/data/products'; // Renamed to avoid conflict
 import { useToast } from '@/components/ui/use-toast';
 
@@ -185,12 +186,31 @@ const ProductsPage = () => {
           </div>
           
           {filteredProducts.length > 0 ? (
-            <ProductGrid products={filteredProducts} />
+            <>
+              <ProductGrid products={filteredProducts} />
+              
+              {/* AI-Powered Recommendations */}
+              <ProductRecommendations 
+                category={selectedCategory}
+                title="You Might Also Like"
+                maxItems={4}
+                showReasonBadges={true}
+                className="mt-12 border-t pt-8"
+              />
+            </>
           ) : (
             <div className="text-center py-12">
               <h2 className="text-xl font-medium mb-2">No products found</h2>
               <p className="text-gray-600 mb-4">Try adjusting your search or filter criteria.</p>
               <Button onClick={handleClearFilters} variant="outline">Clear All Filters</Button>
+              
+              {/* Show recommendations even when no products found */}
+              <ProductRecommendations 
+                title="Explore Our Popular Products"
+                maxItems={4}
+                showReasonBadges={true}
+                className="mt-8"
+              />
             </div>
           )}
         </div>

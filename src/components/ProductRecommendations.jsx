@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Sparkles, TrendingUp, ShoppingCart, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -21,6 +22,7 @@ const ProductRecommendations = ({
   const [recommendationType, setRecommendationType] = useState('hybrid');
   const { getRecommendations } = useProductRecommendations();
   const { theme } = useTheme();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchRecommendations();
@@ -190,7 +192,7 @@ const ProductRecommendations = ({
         >
           <Button 
             variant="outline" 
-            onClick={() => window.location.href = '/products'}
+            onClick={() => navigate('/products')}
             className="flex items-center gap-2"
           >
             <Sparkles className="h-4 w-4" />

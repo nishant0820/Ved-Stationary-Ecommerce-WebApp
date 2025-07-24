@@ -26,14 +26,7 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="products" element={<ProductsPage />} />
           <Route path="about" element={<AboutPage />} />
-          <Route 
-            path="products/:id" 
-            element={
-              <AuthProtectedRoute>
-                <ProductDetailPage />
-              </AuthProtectedRoute>
-            } 
-          />
+          <Route path="products/:id" element={<ProductDetailPage />} />
           <Route 
             path="cart" 
             element={

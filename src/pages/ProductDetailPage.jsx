@@ -1,203 +1,196 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Star, ShoppingCart, Heart, Truck, Shield } from 'lucide-react';
-import { supabase } from '../services/supabase';
-import { useAuth } from '../context/AuthContext';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { ShoppingCart, ArrowLeft, Star, ThumbsUp, Percent } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useCart } from '@/contexts/CartContext.jsx';
+import { useAuth } from '@/contexts/AuthContext.jsx';
+import { useToast } from '@/components/ui/use-toast';
+import { getProductById } from '@/data/products';
+import ProductRecommendations from '@/components/ProductRecommendations.jsx';
+import { PageLoader } from '@/components/ui/LoadingSpinner.jsx';
+import { useTheme } from '@/contexts/ThemeContext.jsx';
+import { cn } from '@/lib/utils';
 
-const ProductDetail = () => {
+const ProductDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
   const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
-  const [showAuthModal, setShowAuthModal] = useState(false);
+  const { addToCart, cartItems } = useCart();
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(true);
+  const { theme } = useTheme();
 
-  // Fetch product details - NO AUTHENTICATION REQUIRED
   useEffect(() => {
     const fetchProduct = async () => {
+      setLoading(true);
       try {
-        const { data, error } = await supabase
-          .from('products')
-          .select('*')
-          .eq('id', id)
-          .single();
-        
-        if (error) throw error;
-        setProduct(data);
+        const fetchedProduct = await getProductById(id);
+        if (fetchedProduct) {
+          setProduct(fetchedProduct);
+        } else {
+          toast({ title: "Product not found", variant: "destructive" });
+          navigate('/products');
+        }
       } catch (error) {
-        console.error('Error fetching product:', error);
+        toast({ title: "Error fetching product", description: error.message, variant: "destructive" });
+        navigate('/products');
       } finally {
         setLoading(false);
       }
     };
-
     fetchProduct();
-  }, [id]);
+  }, [id, navigate, toast]);
 
-  // Add to cart - AUTHENTICATION REQUIRED
-  const handleAddToCart = async () => {
-    // Check if user is authenticated
+  const handleAddToCart = () => {
     if (!user) {
-      setShowAuthModal(true);
+      toast({
+        title: "Login Required",
+        description: "Please log in to add items to your cart.",
+        variant: "destructive",
+      });
+      navigate('/login');
       return;
     }
-
-    try {
-      const { error } = await supabase
-        .from('cart_items')
-        .insert([{
-          user_id: user.id,
-          product_id: product.id,
-          quantity: quantity
-        }]);
-
-      if (error) throw error;
-      
-      alert('Product added to cart successfully!');
-      navigate('/cart');
-    } catch (error) {
-      console.error('Error adding to cart:', error);
-      alert('Failed to add product to cart');
+    if (product) {
+      addToCart({ ...product, quantity });
+      toast({
+        title: `${product.name} added to cart!`,
+        description: `Quantity: ${quantity}`,
+      });
     }
   };
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">
-      <div className="text-2xl">Loading...</div>
-    </div>;
+    return <PageLoader text="Loading product details..." />;
   }
 
   if (!product) {
-    return <div className="min-h-screen flex items-center justify-center">
-      <div className="text-2xl">Product not found</div>
-    </div>;
+    return (
+      <div className="container mx-auto px-4 py-8 text-center">
+        <h1 className="text-2xl font-semibold text-foreground">Product not found</h1>
+        <Button asChild variant="link" className="mt-4">
+          <Link to="/products">
+            <ArrowLeft className="mr-2 h-4 w-4" /> Go back to products
+          </Link>
+        </Button>
+      </div>
+    );
   }
 
+  const finalPrice = product.discount > 0 ? product.price * (1 - product.discount / 100) : product.price;
+  const itemInCart = cartItems.find(item => item.id === product.id);
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <button 
-          onClick={() => navigate('/')}
-          className="mb-6 text-blue-600 hover:text-blue-700 font-semibold"
+    <div className={cn("container mx-auto px-4 py-8", theme === 'dark' ? 'text-slate-100' : 'text-gray-900')}>
+      <Button variant="ghost" onClick={() => navigate(-1)} className="mb-6 text-foreground hover:bg-muted">
+        <ArrowLeft className="mr-2 h-4 w-4" /> Back
+      </Button>
+      <div className="grid md:grid-cols-2 gap-8 items-start">
+        <motion.div
+          className={cn("rounded-lg shadow-lg overflow-hidden", theme === 'dark' ? 'bg-slate-800' : 'bg-card')}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
         >
-          ← Back to Products
-        </button>
+          <img 
+            src={product.image}
+            alt={product.name}
+            className="w-full h-auto object-cover aspect-square"/>
+        </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-12">
-          {/* Product Image */}
-          <div className="bg-gradient-to-br from-blue-100 to-purple-100 rounded-3xl p-12 flex items-center justify-center">
-            <div className="text-9xl">{product.image_url}</div>
+        <motion.div
+          className="space-y-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+        >
+          <h1 className="text-4xl font-bold tracking-tight text-foreground">{product.name}</h1>
+
+          <div className="flex items-center space-x-2">
+            <div className="flex text-yellow-400">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className={`h-5 w-5 ${i < 4 ? 'fill-current' : ''}`} />
+              ))}
+            </div>
+            <span className="text-sm text-muted-foreground">(125 reviews)</span>
           </div>
 
-          {/* Product Info */}
-          <div className="space-y-6">
-            <h1 className="text-4xl font-bold text-gray-900">{product.name}</h1>
-            
-            <div className="flex items-center gap-3">
-              <div className="flex items-center">
-                <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                <span className="ml-2 font-semibold">{product.rating}</span>
-              </div>
-              <span className="text-gray-500">({product.reviews_count} reviews)</span>
+          <div>
+            <div className="flex items-baseline space-x-2">
+              <span className="text-3xl font-bold text-primary">₹{finalPrice.toFixed(2)}</span>
+              {product.discount > 0 && (
+                <span className={cn("text-xl line-through", theme === 'dark' ? 'text-slate-400' : 'text-gray-500')}>₹{product.price.toFixed(2)}</span>
+              )}
             </div>
-
-            <div className="text-4xl font-bold text-blue-600">
-              ₹{product.price}
-              <span className="text-xl text-gray-500 line-through ml-3">
-                ₹{product.price + 100}
-              </span>
-            </div>
-
-            <p className="text-gray-700 text-lg leading-relaxed">
-              {product.description || 'High-quality stationary product perfect for students, professionals, and artists.'}
-            </p>
-
-            {/* Quantity Selector */}
-            <div className="flex items-center gap-4">
-              <span className="font-semibold">Quantity:</span>
-              <div className="flex items-center border-2 border-gray-300 rounded-lg">
-                <button 
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="px-4 py-2 hover:bg-gray-100"
-                >
-                  -
-                </button>
-                <span className="px-6 py-2 font-semibold">{quantity}</span>
-                <button 
-                  onClick={() => setQuantity(quantity + 1)}
-                  className="px-4 py-2 hover:bg-gray-100"
-                >
-                  +
-                </button>
+            {product.discount > 0 && (
+              <div className="mt-1 flex items-center text-sm font-medium text-green-500 dark:text-green-400">
+                <Percent className="h-4 w-4 mr-1" />
+                <span>{product.discount}% OFF</span>
               </div>
-            </div>
+            )}
+          </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-4">
-              <button
-                onClick={handleAddToCart}
-                className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition flex items-center justify-center gap-2"
-              >
-                <ShoppingCart className="w-5 h-5" />
-                Add to Cart
-              </button>
-              <button className="bg-white border-2 border-gray-300 px-6 py-4 rounded-xl hover:border-red-500 hover:text-red-500 transition">
-                <Heart className="w-6 h-6" />
-              </button>
-            </div>
+          <p className={cn("leading-relaxed", theme === 'dark' ? 'text-slate-300' : 'text-gray-700')}>{product.description}</p>
 
-            {/* Features */}
-            <div className="grid grid-cols-2 gap-4 pt-6 border-t">
-              <div className="flex items-center gap-3">
-                <Truck className="w-6 h-6 text-blue-600" />
-                <div>
-                  <div className="font-semibold">Free Delivery</div>
-                  <div className="text-sm text-gray-600">2-3 days</div>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <Shield className="w-6 h-6 text-green-600" />
-                <div>
-                  <div className="font-semibold">Secure Payment</div>
-                  <div className="text-sm text-gray-600">100% safe</div>
-                </div>
-              </div>
+          <div className="flex items-center space-x-3">
+            <span className={cn(theme === 'dark' ? 'text-slate-300' : 'text-gray-700')}>Quantity:</span>
+            <input
+              type="number"
+              min="1"
+              value={quantity}
+              onChange={(e) => setQuantity(parseInt(e.target.value))}
+              className={cn("w-20 p-2 border rounded-md text-center", theme === 'dark' ? 'bg-slate-700 border-slate-600 text-slate-100' : 'border-gray-300')}
+            />
+          </div>
+
+          {product.instock ? (
+            <Button
+              size="lg"
+              className="w-full md:w-auto"
+              onClick={handleAddToCart}
+              disabled={itemInCart && itemInCart.quantity >= 10}
+            >
+              <ShoppingCart className="mr-2 h-5 w-5" />
+              {itemInCart ? 'Add More' : 'Add to Cart'}
+            </Button>
+          ) : (
+            <Button size="lg" className="w-full md:w-auto" disabled>
+              Out of Stock
+            </Button>
+          )}
+          {itemInCart && itemInCart.quantity >= 10 && (
+             <p className="text-sm text-red-500 mt-1">Maximum quantity (10) already in cart.</p>
+          )}
+
+          <div className={cn("border-t pt-6 space-y-3", theme === 'dark' ? 'border-slate-700' : 'border-gray-200')}>
+            <div className="flex items-center text-sm">
+              <ThumbsUp className="h-5 w-5 mr-2 text-green-500 dark:text-green-400" />
+              <span className={cn(theme === 'dark' ? 'text-slate-300' : 'text-gray-700')}>95% of customers recommend this product.</span>
+            </div>
+            <div className="flex items-center text-sm">
+              <span className={cn("font-medium mr-2", theme === 'dark' ? 'text-slate-100' : 'text-gray-900')}>Category:</span>
+              <Link to={`/products?category=${product.category}`} className="text-primary hover:underline capitalize">
+                {product.category}
+              </Link>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
-      {/* Authentication Modal */}
-      {showAuthModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
-            <h2 className="text-2xl font-bold mb-4">Sign In Required</h2>
-            <p className="text-gray-600 mb-6">
-              Please sign in to add items to your cart and make purchases.
-            </p>
-            <div className="flex gap-4">
-              <button
-                onClick={() => {
-                  setShowAuthModal(false);
-                  navigate('/login');
-                }}
-                className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold"
-              >
-                Sign In
-              </button>
-              <button
-                onClick={() => setShowAuthModal(false)}
-                className="flex-1 bg-gray-200 text-gray-800 py-3 rounded-xl font-semibold"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* AI-Powered Product Recommendations */}
+      <ProductRecommendations 
+        currentProduct={product}
+        category={product?.category}
+        title="Customers Also Viewed"
+        maxItems={4}
+        showReasonBadges={true}
+        className="mt-12 border-t pt-8"
+      />
     </div>
   );
 };
 
-export default ProductDetail;
+export default ProductDetailPage;

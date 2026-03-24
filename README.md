@@ -1,6 +1,6 @@
 # Ved-Stationary-Ecommerce-WebApp
 
-An online platform for Ved Stationary, allowing users to browse products, add items to their cart, and complete purchases. The website also includes an admin dashboard for managing products, orders, and users.
+An online platform for StarSctib, allowing users to browse products, add items to their cart, and complete purchases. The website also includes an admin dashboard for managing products, orders, and users.
 
 ## ✨ Features
 

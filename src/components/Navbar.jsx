@@ -50,7 +50,7 @@ const Navbar = () => {
   return (
     <header 
       className={`sticky top-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-background/90 backdrop-blur-md shadow-sm' : 'bg-background'
+        isScrolled ? 'bg-amber-50/90 dark:bg-stone-950/90 backdrop-blur-md shadow-sm border-b border-amber-100 dark:border-stone-800' : 'bg-amber-50 dark:bg-stone-950'
       }`}
     >
       <div className="container mx-auto px-4 py-4">
@@ -69,7 +69,7 @@ const Navbar = () => {
                 <line x1="10" y1="9" x2="8" y2="9"/>
               </svg>
             </motion.div>
-            <span className="font-bold text-xl text-primary">Ved Stationary</span>
+            <span className="font-bold text-xl text-primary">StarSctib</span>
           </Link>
 
           <nav className="hidden md:flex items-center space-x-6">

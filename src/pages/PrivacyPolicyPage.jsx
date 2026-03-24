@@ -23,7 +23,7 @@ const PrivacyPolicyPage = () => {
               Privacy Policy
             </h1>
             <p className="text-lg text-gray-600 dark:text-gray-300">
-              Ved Stationary and Graphics - Protecting Your Privacy
+              StarSctib - Protecting Your Privacy
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
               Last updated: {lastUpdated}
@@ -40,7 +40,7 @@ const PrivacyPolicyPage = () => {
                 Introduction
               </h2>
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                At Ved Stationary and Graphics, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, store, and protect your information when you use our website and services.
+                At StarSctib, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, store, and protect your information when you use our website and services.
               </p>
             </section>
 

@@ -102,7 +102,7 @@ const createRazorpayOrder = async (orderData, onSuccess, onError) => {
       key: razorpayKey, // Your Razorpay key
       amount: order.amount, // Use amount from backend response
       currency: "INR",
-      name: 'Ved Stationary and Graphics',
+      name: 'StarSctib',
       description: `Order fx`,
       order_id: order.id, // Use the actual order ID from backend
 

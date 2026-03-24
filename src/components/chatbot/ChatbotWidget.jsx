@@ -25,7 +25,7 @@ const ChatbotWidget = () => {
       setMessages([
         { 
           sender: 'bot', 
-          text: "Hello! I'm Ved's AI assistant. How can I help you find the perfect stationery today? You can ask me about products, prices, or categories.",
+          text: "Hello! I'm StarSctib's AI assistant. How can I help you find the perfect stationery today? You can ask me about products, prices, or categories.",
           id: Date.now()
         }
       ]);
@@ -138,7 +138,7 @@ const ChatbotWidget = () => {
             )}>
               <div className="flex items-center gap-2">
                 <Bot className="text-primary h-6 w-6" />
-                <h3 className="font-semibold text-lg text-foreground">Ved Stationary Assistant</h3>
+                <h3 className="font-semibold text-lg text-foreground">StarSctib Assistant</h3>
               </div>
               <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-foreground">
                 <X size={20} />

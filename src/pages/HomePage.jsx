@@ -105,7 +105,7 @@ const FeaturesSection = () => {
   ];
 
   return (
-    <section className={cn("py-16", theme === 'dark' ? 'bg-slate-900' : 'bg-background')}>
+    <section className={cn("py-16", theme === 'dark' ? 'bg-amber-950/20' : 'bg-amber-50')}>
       <div className="container mx-auto px-4">
         <motion.div
           className="grid grid-cols-1 md:grid-cols-4 gap-8"
@@ -159,7 +159,7 @@ const FeaturedProductsSection = () => {
   }, [toast]);
 
   return (
-    <section className={cn("py-16", theme === 'dark' ? 'bg-slate-800' : 'bg-muted/50')}>
+    <section className={cn("py-16", theme === 'dark' ? 'bg-stone-900/60' : 'bg-stone-100')}>
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <motion.h2
@@ -213,7 +213,7 @@ const FeaturedProductsSection = () => {
 const CategoriesSection = () => {
   const { theme } = useTheme();
   return (
-    <section className={cn("py-16", theme === 'dark' ? 'bg-slate-900' : 'bg-background')}>
+    <section className={cn("py-16", theme === 'dark' ? 'bg-emerald-950/20' : 'bg-emerald-50/60')}>
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <motion.h2
@@ -277,13 +277,13 @@ const CategoriesSection = () => {
 const TestimonialSection = () => {
   const { theme } = useTheme();
   const testimonials = [
-    { name: "Priya Sharma", role: "Art Student", text: "The quality of the art supplies I purchased from Ved Stationary is exceptional. The watercolor set has such vibrant colors, and the brushes are perfect for detailed work.", avatar: "https://images.unsplash.com/photo-1544212408-c711b7c19b92" },
-    { name: "Rajesh Patel", role: "Business Owner", text: "I've been ordering office supplies for my business from Ved Stationary for over a year now. Their delivery is always prompt, and the products are of great quality. Highly recommended!", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d" },
+    { name: "Priya Sharma", role: "Art Student", text: "The quality of the art supplies I purchased from StarSctib is exceptional. The watercolor set has such vibrant colors, and the brushes are perfect for detailed work.", avatar: "https://images.unsplash.com/photo-1544212408-c711b7c19b92" },
+    { name: "Rajesh Patel", role: "Business Owner", text: "I've been ordering office supplies for my business from StarSctib for over a year now. Their delivery is always prompt, and the products are of great quality. Highly recommended!", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d" },
     { name: "Arjun Mehta", role: "College Student", text: "The notebooks I bought are perfect for my college notes. The paper quality is excellent, and there's no ink bleeding. Plus, the online ordering process was super easy!", avatar: "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79" },
   ];
 
   return (
-    <section className={cn("py-16", theme === 'dark' ? 'bg-slate-800' : 'bg-muted/50')}>
+    <section className={cn("py-16", theme === 'dark' ? 'bg-orange-950/20' : 'bg-orange-50/60')}>
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <motion.h2
@@ -333,7 +333,7 @@ const TestimonialSection = () => {
 const NewsletterSection = () => {
   const { theme } = useTheme();
   return (
-    <section className={cn("py-16", theme === 'dark' ? 'bg-primary/90' : 'bg-primary text-primary-foreground')}>
+    <section className={cn("py-16", theme === 'dark' ? 'bg-stone-900' : 'bg-stone-800 text-stone-50')}>
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto text-center">
           <motion.h2
@@ -372,7 +372,7 @@ const NewsletterSection = () => {
               )}
               required
             />
-            <Button type="submit" variant={theme === 'dark' ? 'default' : 'secondary'} size="lg" className={theme === 'dark' ? 'bg-slate-200 text-slate-900 hover:bg-slate-300' : ''}>
+            <Button type="submit" variant="default" size="lg" className="bg-amber-500 text-stone-900 hover:bg-amber-600 font-semibold border-none">
               Subscribe
             </Button>
           </motion.form>
@@ -383,6 +383,7 @@ const NewsletterSection = () => {
 };
 
 const HomePage = () => {
+  const { theme } = useTheme();
   return (
     <div className="bg-background text-foreground">
       <HeroSection />
@@ -390,7 +391,7 @@ const HomePage = () => {
       <FeaturedProductsSection />
       
       {/* AI-Powered Recommendations Section */}
-      <section className="py-16 bg-muted/30">
+      <section className={cn("py-16", theme === 'dark' ? 'bg-slate-900' : 'bg-slate-50')}>
         <div className="container mx-auto px-4">
           <ProductRecommendations 
             title="Personalized for You"

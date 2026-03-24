@@ -47,7 +47,7 @@ const TermsConditionsPage = () => {
                   <h2 className="text-2xl font-semibold text-foreground">1. Introduction</h2>
                 </div>
                 <p className="text-muted-foreground leading-relaxed">
-                  Welcome to Ved Stationary and Graphics ("we," "our," or "us"). These Terms and Conditions ("Terms") 
+                  Welcome to StarSctib ("we," "our," or "us"). These Terms and Conditions ("Terms") 
                   govern your use of our website and services. By accessing or using our website, you agree to be bound 
                   by these Terms. If you disagree with any part of these terms, then you may not access our service.
                 </p>
@@ -87,7 +87,7 @@ const TermsConditionsPage = () => {
                 <h2 className="text-2xl font-semibold text-foreground mb-4">3. Products and Services</h2>
                 <div className="space-y-4 text-muted-foreground leading-relaxed">
                   <p>
-                    Ved Stationary and Graphics offers a wide range of stationary items, office supplies, art materials, 
+                    StarSctib offers a wide range of stationary items, office supplies, art materials, 
                     and graphic design services. All products are subject to availability.
                   </p>
                   <p>
@@ -233,7 +233,7 @@ const TermsConditionsPage = () => {
                 <h2 className="text-2xl font-semibold text-foreground mb-4">9. Limitation of Liability</h2>
                 <div className="space-y-4 text-muted-foreground leading-relaxed">
                   <p>
-                    In no case shall Ved Stationary and Graphics, our directors, officers, employees, affiliates, agents, 
+                    In no case shall StarSctib, our directors, officers, employees, affiliates, agents, 
                     contractors, interns, suppliers, service providers, or licensors be liable for any injury, loss, claim, 
                     or any direct, indirect, incidental, punitive, special, or consequential damages of any kind.
                   </p>

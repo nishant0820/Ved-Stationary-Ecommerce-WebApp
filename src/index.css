@@ -4,48 +4,48 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%; /* Light mode background - white */
-    --foreground: 222.2 84% 4.9%; /* Light mode text - almost black */
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 248 90% 59%; /* Primary color - vibrant blue/purple */
-    --primary-foreground: 210 40% 98%; /* Text on primary - light gray/white */
-    --secondary: 210 40% 96.1%; /* Secondary background - light gray */
-    --secondary-foreground: 222.2 47.4% 11.2%; /* Text on secondary - dark blue/black */
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%; /* Muted text - grayish */
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%; /* Destructive actions - red */
+    --background: 40 33% 98%; /* Warm off-white */
+    --foreground: 220 20% 15%; /* Charcoal text */
+    --card: 40 33% 98%;
+    --card-foreground: 220 20% 15%;
+    --popover: 40 33% 98%;
+    --popover-foreground: 220 20% 15%;
+    --primary: 152 50% 35%; /* Deep Emerald / Sage Green */
+    --primary-foreground: 140 30% 98%; /* Mint-white */
+    --secondary: 40 20% 92%; /* Neutral beige/gray */
+    --secondary-foreground: 152 50% 20%; /* Dark emerald */
+    --muted: 40 20% 92%;
+    --muted-foreground: 220 10% 45%; /* Muted gray */
+    --accent: 40 20% 92%;
+    --accent-foreground: 152 50% 20%;
+    --destructive: 0 70% 50%; /* Destructive red */
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%; /* Border color - light gray */
-    --input: 214.3 31.8% 91.4%; /* Input background - light gray */
-    --ring: 248 90% 59%; /* Ring color - primary */
+    --border: 40 15% 85%; /* Soft border */
+    --input: 40 15% 85%;
+    --ring: 152 50% 35%; /* Ring color - primary */
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 224 71.4% 4.1%; /* Dark mode background - very dark blue */
-    --foreground: 210 20% 98%; /* Dark mode text - light gray/white */
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 20% 98%;
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 250 89.8% 60.2%; /* Primary color - same vibrant blue/purple */
-    --primary-foreground: 210 20% 98%; /* Text on primary in dark mode - light gray/white */
-    --secondary: 215 27.9% 16.9%; /* Secondary background - dark gray-blue */
-    --secondary-foreground: 210 20% 98%;
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.9 10.6% 64.9%; /* Muted text - lighter gray */
-    --accent: 215 27.9% 16.9%;
-    --accent-foreground: 210 20% 98%;
-    --destructive: 0 62.8% 30.6%; /* Destructive actions - slightly adjusted red for dark */
+    --background: 220 25% 10%; /* Deep dark navy-grey */
+    --foreground: 40 20% 90%; /* Soft warm white */
+    --card: 220 20% 14%;
+    --card-foreground: 40 20% 90%;
+    --popover: 220 20% 14%;
+    --popover-foreground: 40 20% 90%;
+    --primary: 152 40% 45%; /* Softer emerald for dark mode */
+    --primary-foreground: 220 25% 10%; /* Dark for contrast */
+    --secondary: 220 20% 18%; /* Dark beige/gray */
+    --secondary-foreground: 40 20% 90%;
+    --muted: 220 20% 14%;
+    --muted-foreground: 220 10% 60%; /* Muted text */
+    --accent: 220 20% 18%;
+    --accent-foreground: 40 20% 90%;
+    --destructive: 0 60% 40%; /* Destructive red */
     --destructive-foreground: 210 20% 98%;
-    --border: 215 27.9% 16.9%; /* Border color - dark gray-blue */
-    --input: 215 27.9% 16.9%; /* Input background - dark gray-blue */
-    --ring: 250 89.8% 60.2%; /* Ring color - primary */
+    --border: 220 20% 20%; /* Dark border */
+    --input: 220 20% 20%;
+    --ring: 152 40% 45%;
   }
 }
 
@@ -64,11 +64,11 @@
 
 .hero-pattern {
   background-color: hsl(var(--background));
-  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234f46e5' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%232e8561' fill-opacity='0.12'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 .hero-pattern-dark {
     background-color: hsl(var(--background));
-    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23A78BFA' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234eb789' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
 

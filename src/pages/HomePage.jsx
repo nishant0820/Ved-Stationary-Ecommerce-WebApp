@@ -277,8 +277,8 @@ const CategoriesSection = () => {
 const TestimonialSection = () => {
   const { theme } = useTheme();
   const testimonials = [
-    { name: "Priya Sharma", role: "Art Student", text: "The quality of the art supplies I purchased from StarSctib is exceptional. The watercolor set has such vibrant colors, and the brushes are perfect for detailed work.", avatar: "https://images.unsplash.com/photo-1544212408-c711b7c19b92" },
-    { name: "Rajesh Patel", role: "Business Owner", text: "I've been ordering office supplies for my business from StarSctib for over a year now. Their delivery is always prompt, and the products are of great quality. Highly recommended!", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d" },
+    { name: "Priya Sharma", role: "Art Student", text: "The quality of the art supplies I purchased from StarScrib is exceptional. The watercolor set has such vibrant colors, and the brushes are perfect for detailed work.", avatar: "https://images.unsplash.com/photo-1544212408-c711b7c19b92" },
+    { name: "Rajesh Patel", role: "Business Owner", text: "I've been ordering office supplies for my business from StarScrib for over a year now. Their delivery is always prompt, and the products are of great quality. Highly recommended!", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d" },
     { name: "Arjun Mehta", role: "College Student", text: "The notebooks I bought are perfect for my college notes. The paper quality is excellent, and there's no ink bleeding. Plus, the online ordering process was super easy!", avatar: "https://images.unsplash.com/photo-1531427186611-ecfd6d936c79" },
   ];
 

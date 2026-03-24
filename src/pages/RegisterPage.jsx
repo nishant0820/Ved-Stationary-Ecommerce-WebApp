@@ -51,7 +51,7 @@ const RegisterPage = () => {
       >
         <div>
           <h1 className="text-center text-4xl font-extrabold text-primary">
-            StarSctib & Graphics
+            StarScrib & Graphics
           </h1>
           <h2 className="mt-4 text-center text-2xl font-bold tracking-tight text-foreground">
             Create your account

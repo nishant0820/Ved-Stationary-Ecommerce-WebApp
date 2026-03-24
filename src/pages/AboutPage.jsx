@@ -55,7 +55,7 @@ const AboutPage = () => {
             className="text-center max-w-4xl mx-auto"
           >
             <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-6">
-              About StarSctib & Graphics
+              About StarScrib & Graphics
             </h1>
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
               Your trusted partner for all stationery and graphic design needs since 2009
@@ -148,7 +148,7 @@ const AboutPage = () => {
                   From Humble Beginnings to Industry Leader
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                  Founded in 2009 in the heart of Delhi, StarSctib & Graphics began as a small family business with a simple mission: to provide high-quality stationery and art supplies to students, professionals, and artists at affordable prices.
+                  Founded in 2009 in the heart of Delhi, StarScrib & Graphics began as a small family business with a simple mission: to provide high-quality stationery and art supplies to students, professionals, and artists at affordable prices.
                 </p>
                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                   What started as a single store in Subhash Vihar has now grown into a trusted name in the stationery industry, serving thousands of customers across India. Our commitment to quality, customer service, and innovation has been the driving force behind our success.
@@ -219,7 +219,7 @@ const AboutPage = () => {
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">Meet Our Team</h2>
             <div className="w-24 h-1 bg-primary mx-auto mb-8"></div>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Behind every great company are great people. Meet the passionate individuals who make StarSctib & Graphics what it is today.
+              Behind every great company are great people. Meet the passionate individuals who make StarScrib & Graphics what it is today.
             </p>
           </motion.div>
 

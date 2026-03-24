@@ -45,7 +45,7 @@ export const useChatbot = () => {
   const initializeChat = useCallback(() => {
     setMessages([{ 
       sender: 'bot', 
-      text: "Hello! I'm StarSctib's AI assistant. How can I help you find the perfect stationery today? You can ask me about products, prices, or categories.",
+      text: "Hello! I'm StarScrib's AI assistant. How can I help you find the perfect stationery today? You can ask me about products, prices, or categories.",
       id: Date.now() 
     }]);
   }, []);

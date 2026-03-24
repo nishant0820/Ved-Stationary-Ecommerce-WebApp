@@ -16,9 +16,9 @@ function replaceInDir(dir) {
     } else {
       if (['.js', '.jsx', '.html', '.css', '.md'].includes(path.extname(fullPath))) {
         let content = fs.readFileSync(fullPath, 'utf8');
-        let newContent = content.replace(/StarSctib/gi, 'StarSctib')
-                                .replace(/StarSctib/gi, 'StarSctib')
-                                .replace(/StarSctib's/gi, "StarSctib's");
+        let newContent = content.replace(/StarScrib/gi, 'StarScrib')
+                                .replace(/StarScrib/gi, 'StarScrib')
+                                .replace(/StarScrib's/gi, "StarScrib's");
         if (content !== newContent) {
           fs.writeFileSync(fullPath, newContent);
           console.log('Updated', fullPath);

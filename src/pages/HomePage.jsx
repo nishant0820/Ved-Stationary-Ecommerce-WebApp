@@ -254,8 +254,8 @@ const CategoriesSection = () => {
               >
                 <img 
                   alt={category.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                 src="https://images.unsplash.com/photo-1615988938302-bd2a5a7023bc" />
+                  className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
+                 src={category.image || "https://images.unsplash.com/photo-1615988938302-bd2a5a7023bc"} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
                   <div>
                     <h3 className="text-white text-xl font-semibold mb-2">{category.name}</h3>

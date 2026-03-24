@@ -3,11 +3,11 @@ import { supabase } from '@/lib/supabaseClient';
 export const products = []; 
 
 export const categories = [
-  { id: 'notebooks', name: 'Notebooks & Journals' },
-  { id: 'pens', name: 'Pens & Pencils' },
-  { id: 'art', name: 'Art Supplies' },
-  { id: 'office', name: 'Office Supplies' },
-  { id: 'papers', name: 'Papers' }
+  { id: 'notebooks', name: 'Notebooks & Journals', image: '/notebooks.png' },
+  { id: 'pens', name: 'Pens & Pencils', image: '/pens.png' },
+  { id: 'art', name: 'Art Supplies', image: '/art.png' },
+  { id: 'office', name: 'Office Supplies', image: '/office.png' },
+  { id: 'papers', name: 'Papers', image: '/paper.png' }
 ];
 
 
